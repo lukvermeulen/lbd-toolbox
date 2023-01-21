@@ -1,4 +1,13 @@
-import { Accordion, AspectRatio, Card, SimpleGrid, Image } from "@mantine/core";
+import {
+  Accordion,
+  AspectRatio,
+  Card,
+  SimpleGrid,
+  Image,
+  Space,
+  Anchor,
+  Text,
+} from "@mantine/core";
 import { AddElement } from "~/components/elements/add-element";
 import { trpc } from "../utils/trpc";
 
@@ -51,7 +60,10 @@ export default function RepresentationsPage() {
   }
   return (
     <>
-      <h1>{representation.data.message}</h1>
+      <h1>Representations</h1>
+      <p>{representation.data.message}</p>
+      <Text>Manage building representations of various types.</Text>
+      <Space h="md" />
       <Accordion
         defaultValue={["pictures"]}
         variant="separated"

@@ -9,6 +9,8 @@ import {
   SimpleGrid,
   Button,
   AspectRatio,
+  Anchor,
+  Space,
 } from "@mantine/core";
 import { AddElement } from "~/components/elements/add-element";
 import { trpc } from "../utils/trpc";
@@ -62,7 +64,17 @@ export default function TopologyPage() {
   }
   return (
     <>
-      <h1>{topology.data.message}</h1>
+      <h1>Topology</h1>
+      <p>{topology.data.message}</p>
+      <Text>
+        Describe the core topological concept of the building according to the{" "}
+        <Anchor href="https://w3c-lbd-cg.github.io/bot">
+          Building Topology Ontology
+        </Anchor>
+        .
+      </Text>
+      <Space h="md" />
+
       <Accordion
         defaultValue={["site", "zone"]}
         variant="separated"

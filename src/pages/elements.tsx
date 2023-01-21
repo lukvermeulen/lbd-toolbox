@@ -1,3 +1,4 @@
+import { Space, Text } from "@mantine/core";
 import { trpc } from "../utils/trpc";
 
 export default function ElementsPage() {
@@ -11,8 +12,11 @@ export default function ElementsPage() {
     );
   }
   return (
-    <div>
-      <h1>{element.data.message}</h1>
-    </div>
+    <>
+      <h1>Elements</h1>
+      <p>{element.data.message}</p>
+      <Text>Show element, their properties and their meta information.</Text>
+      <Space h="md" />
+    </>
   );
 }
