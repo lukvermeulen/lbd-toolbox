@@ -1,5 +1,6 @@
-import { Anchor, Container, Group, Text } from "@mantine/core";
-import Link from "next/link";
+import { Container, Space } from "@mantine/core";
+import { Footer } from "./footer";
+import { Header } from "./header";
 
 type AppLayoutProps = {
   children: React.ReactNode;
@@ -8,21 +9,12 @@ type AppLayoutProps = {
 export function AppLayout({ children }: AppLayoutProps) {
   return (
     <Container>
-      <Group>
-        <Text href="/" component={Link}>
-          /
-        </Text>
-        <Text href="topology" component={Link}>
-          Toplogy
-        </Text>
-        <Text href="representations" component={Link}>
-          Representations
-        </Text>
-        <Text href="elements" component={Link}>
-          Elements
-        </Text>
-      </Group>
+      <Space h="md" />
+      <Header />
       <main>{children}</main>
+      <Space h="xl" />
+      <Footer />
+      <Space h="md" />
     </Container>
   );
 }
