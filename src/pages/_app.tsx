@@ -2,7 +2,7 @@ import { MantineProvider } from "@mantine/core";
 import type { AppType } from "next/app";
 import Head from "next/head";
 import { trpc } from "../utils/trpc";
-import { CustomFonts } from "./custom-fonts";
+import { CustomFonts } from "../components/mantine/custom-fonts";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
