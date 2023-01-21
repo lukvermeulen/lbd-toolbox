@@ -1,5 +1,5 @@
 {
-  "name": "@examples/next-minimal",
+  "name": "lbd-toolbox",
   "version": "10.9.0",
   "private": true,
   "scripts": {
@@ -9,6 +9,13 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/server": "^11.10.0",
+    "@mantine/core": "^5.10.1",
+    "@mantine/form": "^5.10.1",
+    "@mantine/hooks": "^5.10.1",
+    "@mantine/next": "^5.10.1",
+    "@mantine/prism": "^5.10.1",
     "@tanstack/react-query": "^4.3.8",
     "@trpc/client": "^10.9.0",
     "@trpc/next": "^10.9.0",
