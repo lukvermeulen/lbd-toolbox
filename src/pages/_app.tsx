@@ -3,6 +3,7 @@ import type { AppType } from "next/app";
 import Head from "next/head";
 import { trpc } from "../utils/trpc";
 import { CustomFonts } from "../components/mantine/custom-fonts";
+import { AppLayout } from "~/components/layout/app-layout";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
@@ -21,12 +22,14 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         theme={{
           /** Put your mantine theme override here */
           colorScheme: "light",
-          fontFamily: "Jost",
-          // "jost-v9-latin, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
+          fontFamily:
+            "Jost, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
         }}
       >
         <CustomFonts />
-        <Component {...pageProps} />
+        <AppLayout>
+          <Component {...pageProps} />
+        </AppLayout>
       </MantineProvider>
     </>
   );
