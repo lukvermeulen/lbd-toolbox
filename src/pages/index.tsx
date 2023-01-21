@@ -1,3 +1,4 @@
+import { Space, Text } from "@mantine/core";
 import { trpc } from "../utils/trpc";
 
 export default function IndexPage() {
@@ -12,7 +13,14 @@ export default function IndexPage() {
   }
   return (
     <div>
-      <h1>API status: {healthcheck.data}</h1>
+      <h1>LBD toolbox</h1>
+      <p>API status: {healthcheck.data}</p>
+      <Text>
+        Create the semantic topolgy of a building, manage project related
+        representations and manage building elements and their according
+        properties or meta information.
+      </Text>
+      <Space h="md" />
     </div>
   );
 }

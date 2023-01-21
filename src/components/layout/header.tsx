@@ -7,7 +7,11 @@ export function Header() {
 
   return (
     <Group>
-      <Text href="/" component={Link}>
+      <Text
+        href="/"
+        component={Link}
+        fw={router.pathname === "/" ? 600 : undefined}
+      >
         /
       </Text>
       <Text
