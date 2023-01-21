@@ -22,6 +22,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         theme={{
           /** Put your mantine theme override here */
           colorScheme: "light",
+          primaryColor: "dark",
           fontFamily:
             "Jost, -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif",
         }}
