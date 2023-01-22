@@ -3,7 +3,7 @@
  */
 import { publicProcedure, router } from "../trpc";
 import { elementRouter } from "./element";
-import { representationRouter } from "./representation";
+import { representationRouter } from "./representation/representation";
 import { topologyRouter } from "./topolgy/topology";
 
 export const appRouter = router({

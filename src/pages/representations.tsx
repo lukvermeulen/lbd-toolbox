@@ -49,19 +49,34 @@ function RepresentationElement() {
 }
 
 export default function RepresentationsPage() {
-  const representation = trpc.representation.greeting.useQuery({ name: "hi" });
+  const pictures = trpc.representation.picture.list.useQuery();
+  const pictureMutation = trpc.representation.picture.add.useMutation({
+    onSuccess: pictures.refetch,
+  });
 
-  if (!representation.data) {
-    return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
-    );
-  }
+  const meshes = trpc.representation.mesh.list.useQuery();
+  const meshMutation = trpc.representation.mesh.add.useMutation({
+    onSuccess: meshes.refetch,
+  });
+
+  const breps = trpc.representation.brep.list.useQuery();
+  const brepMutation = trpc.representation.brep.add.useMutation({
+    onSuccess: breps.refetch,
+  });
+
+  const pointclouds = trpc.representation.pointcloud.list.useQuery();
+  const pointcloudMutatoin = trpc.representation.pointcloud.add.useMutation({
+    onSuccess: pointclouds.refetch,
+  });
+
+  const plans = trpc.representation.plan.list.useQuery();
+  const planMutation = trpc.representation.plan.add.useMutation({
+    onSuccess: plans.refetch,
+  });
+
   return (
     <>
       <h1>Representations</h1>
-      <p>{representation.data.message}</p>
       <Text>Manage building representations of various types.</Text>
       <Space h="md" />
       <Accordion
@@ -74,12 +89,13 @@ export default function RepresentationsPage() {
           <Accordion.Panel>
             Images taken by camera.
             <SimpleGrid cols={4}>
-              <AddElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
+              <AddElement
+                action={() => pictureMutation.mutate({ name: "Picture" })}
+              />
+              {!pictures.data && <Text>Loading...</Text>}
+              {pictures.data?.map((picture) => (
+                <RepresentationElement />
+              ))}
             </SimpleGrid>
           </Accordion.Panel>
         </Accordion.Item>
@@ -89,12 +105,13 @@ export default function RepresentationsPage() {
             A 3D object representation consisting of a collection of vertices
             and polygons.
             <SimpleGrid cols={4}>
-              <AddElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
+              <AddElement
+                action={() => meshMutation.mutate({ name: "Mesh" })}
+              />
+              {!meshes.data && <Text>Loading...</Text>}
+              {meshes.data?.map((mesh) => (
+                <RepresentationElement />
+              ))}
             </SimpleGrid>
           </Accordion.Panel>
         </Accordion.Item>
@@ -103,12 +120,13 @@ export default function RepresentationsPage() {
           <Accordion.Panel>
             Boundary representations, a 3D object representation.
             <SimpleGrid cols={4}>
-              <AddElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
+              <AddElement
+                action={() => brepMutation.mutate({ name: "BREP" })}
+              />
+              {!breps.data && <Text>Loading...</Text>}
+              {breps.data?.map((brep) => (
+                <RepresentationElement />
+              ))}
             </SimpleGrid>
           </Accordion.Panel>
         </Accordion.Item>
@@ -118,12 +136,13 @@ export default function RepresentationsPage() {
             A discrete set of data points in space, acquired e.g. by laser
             scanning or sfm.
             <SimpleGrid cols={4}>
-              <AddElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
+              <AddElement
+                action={() => pointcloudMutatoin.mutate({ name: "Pointcloud" })}
+              />
+              {!pointclouds.data && <Text>Loading...</Text>}
+              {pointclouds.data?.map((pointcloud) => (
+                <RepresentationElement />
+              ))}
             </SimpleGrid>
           </Accordion.Panel>
         </Accordion.Item>
@@ -132,12 +151,13 @@ export default function RepresentationsPage() {
           <Accordion.Panel>
             Two-Dimensional representations e.g. as line drawing.
             <SimpleGrid cols={4}>
-              <AddElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
-              <RepresentationElement />
+              <AddElement
+                action={() => planMutation.mutate({ name: "Plan" })}
+              />
+              {!plans.data && <Text>Loading...</Text>}
+              {plans.data?.map((plan) => (
+                <RepresentationElement />
+              ))}
             </SimpleGrid>
           </Accordion.Panel>
         </Accordion.Item>
