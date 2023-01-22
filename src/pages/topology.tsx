@@ -78,13 +78,6 @@ export default function TopologyPage() {
     onSuccess: spaces.refetch,
   });
 
-  if (!buildings.data) {
-    return (
-      <div>
-        <h1>Loading buildings...</h1>
-      </div>
-    );
-  }
   return (
     <>
       <h1>Topology</h1>
@@ -111,6 +104,7 @@ export default function TopologyPage() {
               <AddElement
                 action={() => zoneMutation.mutate({ name: "Space" })}
               />
+              {!zones.data && <Text>Loading...</Text>}
               {zones.data?.map((zone) => (
                 <TopologyElement />
               ))}
@@ -128,6 +122,7 @@ export default function TopologyPage() {
                   siteMutation.mutate({ name: "Site" });
                 }}
               />
+              {!sites.data && <Text>Loading...</Text>}
               {sites.data?.map((site) => (
                 <TopologyElement />
               ))}
@@ -146,6 +141,7 @@ export default function TopologyPage() {
                   buildingMutation.mutate({ name: "Building" });
                 }}
               />
+              {!buildings.data && <Text>Loading...</Text>}
               {buildings.data?.map((building) => (
                 <TopologyElement />
               ))}
@@ -163,6 +159,7 @@ export default function TopologyPage() {
                   storeyMutation.mutate({ name: "Storey" });
                 }}
               />
+              {!storeys.data && <Text>Loading...</Text>}
               {storeys.data?.map((storey) => (
                 <TopologyElement />
               ))}
@@ -180,6 +177,7 @@ export default function TopologyPage() {
                   spaceMutation.mutate({ name: "Space" });
                 }}
               />
+              {!spaces.data && <Text>Loading...</Text>}
               {spaces.data?.map((space) => (
                 <TopologyElement />
               ))}
