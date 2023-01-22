@@ -54,14 +54,29 @@ function TopologyElement() {
 
 export default function TopologyPage() {
   const buildings = trpc.topology.building.list.useQuery();
+  const buildingMutation = trpc.topology.building.add.useMutation({
+    onSuccess: buildings.refetch,
+  });
 
   const zones = trpc.topology.zone.list.useQuery();
+  const zoneMutation = trpc.topology.zone.add.useMutation({
+    onSuccess: zones.refetch,
+  });
 
   const sites = trpc.topology.site.list.useQuery();
+  const siteMutation = trpc.topology.site.add.useMutation({
+    onSuccess: sites.refetch,
+  });
 
   const storeys = trpc.topology.storey.list.useQuery();
+  const storeyMutation = trpc.topology.storey.add.useMutation({
+    onSuccess: storeys.refetch,
+  });
 
   const spaces = trpc.topology.space.list.useQuery();
+  const spaceMutation = trpc.topology.space.add.useMutation({
+    onSuccess: spaces.refetch,
+  });
 
   if (!buildings.data) {
     return (
@@ -93,7 +108,9 @@ export default function TopologyPage() {
             A part of the physical world or a virtual world that is inherently
             both located in this world and has a 3D spatial extent.
             <SimpleGrid cols={4}>
-              <AddElement />
+              <AddElement
+                action={() => zoneMutation.mutate({ name: "Space" })}
+              />
               {zones.data?.map((zone) => (
                 <TopologyElement />
               ))}
@@ -106,7 +123,11 @@ export default function TopologyPage() {
           <Accordion.Panel>
             An area containing one or more buildings.
             <SimpleGrid cols={4}>
-              <AddElement />
+              <AddElement
+                action={() => {
+                  siteMutation.mutate({ name: "Site" });
+                }}
+              />
               {sites.data?.map((site) => (
                 <TopologyElement />
               ))}
@@ -120,7 +141,11 @@ export default function TopologyPage() {
             An independent unit of the built environment with a characteristic
             spatial structure.
             <SimpleGrid cols={4}>
-              <AddElement />
+              <AddElement
+                action={() => {
+                  buildingMutation.mutate({ name: "Building" });
+                }}
+              />
               {buildings.data?.map((building) => (
                 <TopologyElement />
               ))}
@@ -133,7 +158,11 @@ export default function TopologyPage() {
           <Accordion.Panel>
             A level part of a building.
             <SimpleGrid cols={4}>
-              <AddElement />
+              <AddElement
+                action={() => {
+                  storeyMutation.mutate({ name: "Storey" });
+                }}
+              />
               {storeys.data?.map((storey) => (
                 <TopologyElement />
               ))}
@@ -146,7 +175,11 @@ export default function TopologyPage() {
           <Accordion.Panel>
             A limited three-dimensional extent defined physically or notionally.
             <SimpleGrid cols={4}>
-              <AddElement />
+              <AddElement
+                action={() => {
+                  spaceMutation.mutate({ name: "Space" });
+                }}
+              />
               {spaces.data?.map((space) => (
                 <TopologyElement />
               ))}

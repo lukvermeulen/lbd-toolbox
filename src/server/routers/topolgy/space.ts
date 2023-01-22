@@ -1,17 +1,25 @@
 import { router, publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
+import { oxigraphStore } from "~/server/oxigraph-store";
 
 export const spaceRouter = router({
   list: publicProcedure.query(() => {
-    return [
-      { id: uuidv4(), name: "Abc" },
-      { id: uuidv4(), name: "Abc" },
-      { id: uuidv4(), name: "Abc" },
-      { id: uuidv4(), name: "Abc" },
-      { id: uuidv4(), name: "Abc" },
-      { id: uuidv4(), name: "Abc" },
-    ];
+    const listBotSpaces = `
+      PREFIX : <http://example.org/>
+      PREFIX bot: <https://w3id.org/bot#>
+
+      SELECT ?s WHERE {
+        ?s a bot:Space
+      }
+    `;
+
+    const botSpaces = oxigraphStore.query(listBotSpaces);
+
+    const spaceList = botSpaces.map(
+      (space: any) => space.get("s").value
+    ) as string[];
+    return spaceList;
   }),
   byId: publicProcedure
     .input(z.object({ id: z.string() }))
@@ -21,10 +29,22 @@ export const spaceRouter = router({
   add: publicProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async ({ input }) => {
-      const space = {
-        id: uuidv4(),
-        name: input.name,
-      };
-      return space;
+      const spaceName = `${uuidv4()}_${input.name}`;
+
+      const addBotSpace = `
+        PREFIX : <http://example.org/>
+        PREFIX bot: <https://w3id.org/bot#>
+         
+        INSERT DATA {
+          :${spaceName} a bot:Space .
+        }
+      `;
+
+      // oxigraphStore.update(
+      //   `PREFIX : <http://example.org/>
+      //   DELETE WHERE { ?s ?p ?o }`
+      // );
+      oxigraphStore.update(addBotSpace);
+      return;
     }),
 });
