@@ -31,7 +31,6 @@ export const storeyRouter = router({
     .input(z.object({ name: z.string() }))
     .mutation(async ({ input }) => {
       const storeyName = `${uuidv4()}_${input.name}`;
-      console.log(storeyName);
 
       const addBotStorey = `
         PREFIX : <http://example.org/>

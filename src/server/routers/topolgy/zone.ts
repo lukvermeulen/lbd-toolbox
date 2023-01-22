@@ -30,7 +30,6 @@ export const zoneRouter = router({
     .input(z.object({ name: z.string() }))
     .mutation(async ({ input }) => {
       const zoneName = `${uuidv4()}_${input.name}`;
-      console.log(zoneName);
 
       const addBotZone = `
           PREFIX : <http://example.org/>

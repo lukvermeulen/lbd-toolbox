@@ -31,7 +31,6 @@ export const siteRouter = router({
     .input(z.object({ name: z.string() }))
     .mutation(async ({ input }) => {
       const siteName = `${uuidv4()}_${input.name}`;
-      console.log(siteName);
 
       const addBotSite = `
         PREFIX : <http://example.org/>

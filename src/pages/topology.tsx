@@ -102,7 +102,7 @@ export default function TopologyPage() {
             both located in this world and has a 3D spatial extent.
             <SimpleGrid cols={4}>
               <AddElement
-                action={() => zoneMutation.mutate({ name: "Space" })}
+                action={() => zoneMutation.mutate({ name: "Zone" })}
               />
               {!zones.data && <Text>Loading...</Text>}
               {zones.data?.map((zone) => (
