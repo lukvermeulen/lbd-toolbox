@@ -1,22 +1,36 @@
-import { Space, Text } from "@mantine/core";
+import { AspectRatio, Card, Space, Text, Image } from "@mantine/core";
+import { AddElement } from "~/components/elements/add-element";
 import { trpc } from "../utils/trpc";
 
-export default function ElementsPage() {
-  const element = trpc.element.greeting.useQuery({ name: "hi" });
+function RepresentationElement() {
+  return (
+    <Card shadow={"xs"}>
+      <AspectRatio ratio={5 / 3} sx={{ maxWidth: 300 }} mx="auto">
+        <Image
+          src="https://images.unsplash.com/photo-1527118732049-c88155f2107c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80"
+          alt="Panda"
+        />
+      </AspectRatio>
+    </Card>
+  );
+}
 
-  if (!element.data) {
-    return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
-    );
-  }
+export default function ElementsPage() {
+  const elements = trpc.element.list.useQuery();
+  const pictureMutation = trpc.element.add.useMutation({
+    onSuccess: elements.refetch,
+  });
+
   return (
     <>
       <h1>Elements</h1>
-      <p>{element.data.message}</p>
       <Text>Show element, their properties and their meta information.</Text>
       <Space h="md" />
+      <AddElement action={() => pictureMutation.mutate({ name: "Picture" })} />
+      {!elements.data && <Text>Loading...</Text>}
+      {elements.data?.map((picture) => (
+        <RepresentationElement />
+      ))}
     </>
   );
 }
