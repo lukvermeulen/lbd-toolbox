@@ -53,19 +53,26 @@ function TopologyElement() {
 }
 
 export default function TopologyPage() {
-  const topology = trpc.topology.greeting.useQuery({ name: "hi" });
+  const buildings = trpc.topology.building.list.useQuery();
 
-  if (!topology.data) {
+  const zones = trpc.topology.zone.list.useQuery();
+
+  const sites = trpc.topology.site.list.useQuery();
+
+  const storeys = trpc.topology.storey.list.useQuery();
+
+  const spaces = trpc.topology.space.list.useQuery();
+
+  if (!buildings.data) {
     return (
       <div>
-        <h1>Loading...</h1>
+        <h1>Loading buildings...</h1>
       </div>
     );
   }
   return (
     <>
       <h1>Topology</h1>
-      <p>{topology.data.message}</p>
       <Text>
         Describe the core topological concept of the building according to the{" "}
         <Anchor href="https://w3c-lbd-cg.github.io/bot">
@@ -87,11 +94,9 @@ export default function TopologyPage() {
             both located in this world and has a 3D spatial extent.
             <SimpleGrid cols={4}>
               <AddElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
+              {zones.data?.map((zone) => (
+                <TopologyElement />
+              ))}
             </SimpleGrid>
           </Accordion.Panel>
         </Accordion.Item>
@@ -102,11 +107,9 @@ export default function TopologyPage() {
             An area containing one or more buildings.
             <SimpleGrid cols={4}>
               <AddElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
+              {sites.data?.map((site) => (
+                <TopologyElement />
+              ))}
             </SimpleGrid>
           </Accordion.Panel>
         </Accordion.Item>
@@ -118,11 +121,9 @@ export default function TopologyPage() {
             spatial structure.
             <SimpleGrid cols={4}>
               <AddElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
+              {buildings.data?.map((building) => (
+                <TopologyElement />
+              ))}
             </SimpleGrid>
           </Accordion.Panel>
         </Accordion.Item>
@@ -133,11 +134,9 @@ export default function TopologyPage() {
             A level part of a building.
             <SimpleGrid cols={4}>
               <AddElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
+              {storeys.data?.map((storey) => (
+                <TopologyElement />
+              ))}
             </SimpleGrid>
           </Accordion.Panel>
         </Accordion.Item>
@@ -148,11 +147,9 @@ export default function TopologyPage() {
             A limited three-dimensional extent defined physically or notionally.
             <SimpleGrid cols={4}>
               <AddElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
-              <TopologyElement />
+              {spaces.data?.map((space) => (
+                <TopologyElement />
+              ))}
             </SimpleGrid>
           </Accordion.Panel>
         </Accordion.Item>

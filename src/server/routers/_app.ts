@@ -4,7 +4,7 @@
 import { publicProcedure, router } from "../trpc";
 import { elementRouter } from "./element";
 import { representationRouter } from "./representation";
-import { topologyRouter } from "./topology";
+import { topologyRouter } from "./topolgy/topology";
 
 export const appRouter = router({
   healthcheck: publicProcedure.query(() => "alive"),
