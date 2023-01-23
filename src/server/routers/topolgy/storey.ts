@@ -61,4 +61,22 @@ export const storeyRouter = router({
       oxigraphStore.update(deleteBotStorey);
       return;
     }),
+  hasStorey: publicProcedure
+    .input(z.object({ name: z.string(), storeyName: z.string() }))
+    .mutation(async ({ input }) => {
+      const elementName = input.name;
+      const storeyName = input.storeyName;
+
+      const addHasStorey = `
+        PREFIX : <http://example.org/>
+        PREFIX bot: <https://w3id.org/bot#>
+         
+        INSERT DATA {
+          <${elementName}> bot:hasStorey <${storeyName}> .
+        }
+      `;
+
+      oxigraphStore.update(addHasStorey);
+      return;
+    }),
 });

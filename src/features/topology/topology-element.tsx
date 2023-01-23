@@ -75,7 +75,7 @@ export function TopologyElement({
               <IconInfoCircle size={18} />
             </ActionIcon>
 
-            {LinkMenu && <LinkMenu />}
+            {LinkMenu && <LinkMenu name={name} />}
           </Group>
         </Stack>
       </Card>
