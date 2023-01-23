@@ -1,4 +1,4 @@
-import { AspectRatio, Button, Card, Group } from "@mantine/core";
+import { AspectRatio, Button, Card, Flex, Group } from "@mantine/core";
 import { IconPlus } from "@tabler/icons";
 import { useState } from "react";
 
@@ -16,15 +16,15 @@ export function AddElement<V>({ Modal, submitValues }: AddElementProps<V>) {
 
   return (
     <Card>
-      {/* <AspectRatio ratio={5 / 3} sx={{ maxWidth: 300 }} mx="auto"> */}
-      <Button variant="outline" onClick={() => setOpen(true)}>
-        <IconPlus />
-      </Button>
+      <Flex justify="start" align="center" h="100%">
+        <Button variant="outline" onClick={() => setOpen(true)}>
+          <IconPlus />
+        </Button>
 
-      {Modal && (
-        <Modal open={open} setOpen={setOpen} submitValues={submitValues} />
-      )}
-      {/* </AspectRatio> */}
+        {Modal && (
+          <Modal open={open} setOpen={setOpen} submitValues={submitValues} />
+        )}
+      </Flex>
     </Card>
   );
 }
