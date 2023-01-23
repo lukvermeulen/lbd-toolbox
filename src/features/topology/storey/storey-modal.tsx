@@ -1,4 +1,4 @@
-import { Modal, useMantineTheme } from "@mantine/core";
+import { Modal } from "~/components/modal/modal";
 import { StoreyForm, StoreyFormValues } from "./storey-form";
 
 type SiteModalProps = {
@@ -8,26 +8,13 @@ type SiteModalProps = {
 };
 
 export function StoreyModal({ open, setOpen, submitValues }: SiteModalProps) {
-  const theme = useMantineTheme();
-
   function submitFormValues(values: StoreyFormValues) {
     submitValues(values);
     setOpen(false);
   }
 
   return (
-    <Modal
-      opened={open}
-      onClose={() => setOpen(false)}
-      title="Create bot:Storey"
-      overlayColor={
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[9]
-          : theme.colors.gray[2]
-      }
-      overlayOpacity={0.5}
-      overlayBlur={7}
-    >
+    <Modal open={open} setOpen={setOpen} title="Create bot:Storey">
       <StoreyForm submitFormValues={submitFormValues} />
     </Modal>
   );

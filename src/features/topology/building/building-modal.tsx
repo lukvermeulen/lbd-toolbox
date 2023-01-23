@@ -1,4 +1,4 @@
-import { Modal, useMantineTheme } from "@mantine/core";
+import { Modal } from "~/components/modal/modal";
 import { BuildingForm, BuildingFormValues } from "./building-form";
 
 type BuildingModalProps = {
@@ -12,26 +12,13 @@ export function BuildingModal({
   setOpen,
   submitValues,
 }: BuildingModalProps) {
-  const theme = useMantineTheme();
-
   function submitFormValues(values: BuildingFormValues) {
     submitValues(values);
     setOpen(false);
   }
 
   return (
-    <Modal
-      opened={open}
-      onClose={() => setOpen(false)}
-      title="Create bot:Building"
-      overlayColor={
-        theme.colorScheme === "dark"
-          ? theme.colors.dark[9]
-          : theme.colors.gray[2]
-      }
-      overlayOpacity={0.5}
-      overlayBlur={7}
-    >
+    <Modal open={open} setOpen={setOpen} title="Create bot:Building">
       <BuildingForm submitFormValues={submitFormValues} />
     </Modal>
   );
