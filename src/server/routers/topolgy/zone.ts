@@ -40,11 +40,24 @@ export const zoneRouter = router({
           }
         `;
 
-      // oxigraphStore.update(
-      //   `PREFIX : <http://example.org/>
-      //   DELETE WHERE { ?s ?p ?o }`
-      // );
       oxigraphStore.update(addBotZone);
+      return;
+    }),
+  remove: publicProcedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ input }) => {
+      const zoneName = input.name;
+
+      const deleteBotZone = `
+          PREFIX : <http://example.org/>
+          PREFIX bot: <https://w3id.org/bot#>
+            
+          DELETE DATA {
+            <${zoneName}> a bot:Zone .
+          }
+      `;
+
+      oxigraphStore.update(deleteBotZone);
       return;
     }),
 });

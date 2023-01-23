@@ -19,9 +19,15 @@ export default function TopologyPage() {
   const zoneMutation = trpc.topology.zone.add.useMutation({
     onSuccess: zones.refetch,
   });
+  const zoneDeleteMutation = trpc.topology.zone.remove.useMutation({
+    onSuccess: zones.refetch,
+  });
 
   const sites = trpc.topology.site.list.useQuery();
   const siteMutation = trpc.topology.site.add.useMutation({
+    onSuccess: sites.refetch,
+  });
+  const siteDeleteMutation = trpc.topology.site.remove.useMutation({
     onSuccess: sites.refetch,
   });
 
@@ -29,14 +35,23 @@ export default function TopologyPage() {
   const buildingMutation = trpc.topology.building.add.useMutation({
     onSuccess: buildings.refetch,
   });
+  const buildingDeleteMutation = trpc.topology.building.remove.useMutation({
+    onSuccess: buildings.refetch,
+  });
 
   const storeys = trpc.topology.storey.list.useQuery();
   const storeyMutation = trpc.topology.storey.add.useMutation({
     onSuccess: storeys.refetch,
   });
+  const storeyDeleteMutation = trpc.topology.storey.remove.useMutation({
+    onSuccess: storeys.refetch,
+  });
 
   const spaces = trpc.topology.space.list.useQuery();
   const spaceMutation = trpc.topology.space.add.useMutation({
+    onSuccess: spaces.refetch,
+  });
+  const spaceDeleteMutation = trpc.topology.space.remove.useMutation({
     onSuccess: spaces.refetch,
   });
 
@@ -70,6 +85,7 @@ export default function TopologyPage() {
                   name={zone}
                   category="bot:Zone"
                   LinkMenu={ZoneLinkMenu}
+                  deleteAction={zoneDeleteMutation.mutate}
                 />
               ))}
             </SimpleGrid>
@@ -92,6 +108,7 @@ export default function TopologyPage() {
                   name={site}
                   category="bot:Site"
                   LinkMenu={SiteLinkMenu}
+                  deleteAction={siteDeleteMutation.mutate}
                 />
               ))}
             </SimpleGrid>
@@ -114,6 +131,7 @@ export default function TopologyPage() {
                   name={building}
                   category="bot:Building"
                   LinkMenu={BuildingLinkMenu}
+                  deleteAction={buildingDeleteMutation.mutate}
                 />
               ))}
             </SimpleGrid>
@@ -136,6 +154,7 @@ export default function TopologyPage() {
                   name={storey}
                   category="bot:Storey"
                   LinkMenu={StoreyLinkMenu}
+                  deleteAction={storeyDeleteMutation.mutate}
                 />
               ))}
             </SimpleGrid>
@@ -157,6 +176,7 @@ export default function TopologyPage() {
                   name={space}
                   category="bot:Space"
                   LinkMenu={SpaceLinkMenu}
+                  deleteAction={spaceDeleteMutation.mutate}
                 />
               ))}
             </SimpleGrid>

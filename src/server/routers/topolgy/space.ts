@@ -40,11 +40,24 @@ export const spaceRouter = router({
         }
       `;
 
-      // oxigraphStore.update(
-      //   `PREFIX : <http://example.org/>
-      //   DELETE WHERE { ?s ?p ?o }`
-      // );
       oxigraphStore.update(addBotSpace);
+      return;
+    }),
+  remove: publicProcedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ input }) => {
+      const spaceName = input.name;
+
+      const deleteBotSpace = `
+          PREFIX : <http://example.org/>
+          PREFIX bot: <https://w3id.org/bot#>
+            
+          DELETE DATA {
+            <${spaceName}> a bot:Space .
+          }
+      `;
+
+      oxigraphStore.update(deleteBotSpace);
       return;
     }),
 });

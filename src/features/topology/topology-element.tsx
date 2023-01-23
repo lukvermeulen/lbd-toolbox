@@ -10,16 +10,19 @@ import {
 } from "@mantine/core";
 import { IconDots, IconInfoCircle, IconPencil, IconTrash } from "@tabler/icons";
 import { useState } from "react";
+import { trpc } from "~/utils/trpc";
 import { InfoDrawer } from "./info-drawer";
 
 type TopologyElementProps = {
   category: string;
   name: string;
+  deleteAction: (input: { name: string }) => void;
   LinkMenu?: React.ElementType;
 };
 export function TopologyElement({
   category,
   name,
+  deleteAction,
   LinkMenu,
 }: TopologyElementProps) {
   const [infoOpen, setInfoOpen] = useState(false);
@@ -29,12 +32,6 @@ export function TopologyElement({
     <>
       <Card shadow={"xs"}>
         <Stack>
-          {/* <AspectRatio ratio={5 / 3} sx={{ maxWidth: 300 }} mx="auto">
-          </AspectRatio> */}
-          {/* <Image
-            src="https://images.unsplash.com/photo-1527118732049-c88155f2107c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80"
-            alt="Panda"
-          /> */}
           <Group position="apart">
             <Text>{category}</Text>
             <Menu withinPortal position="bottom-start" shadow="sm">
@@ -46,7 +43,13 @@ export function TopologyElement({
 
               <Menu.Dropdown>
                 <Menu.Item icon={<IconPencil size={14} />}>Edit</Menu.Item>
-                <Menu.Item icon={<IconTrash size={14} />} color="red">
+                <Menu.Item
+                  icon={<IconTrash size={14} />}
+                  color="red"
+                  onClick={() => {
+                    deleteAction({ name });
+                  }}
+                >
                   Delete
                 </Menu.Item>
               </Menu.Dropdown>

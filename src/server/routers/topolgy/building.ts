@@ -41,11 +41,24 @@ export const buildingRouter = router({
         }
       `;
 
-      // oxigraphStore.update(
-      //   `PREFIX : <http://example.org/>
-      //   DELETE WHERE { ?s ?p ?o }`
-      // );
       oxigraphStore.update(addBotBuilding);
+      return;
+    }),
+  remove: publicProcedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ input }) => {
+      const buildingName = input.name;
+
+      const deleteBotBuilding = `
+          PREFIX : <http://example.org/>
+          PREFIX bot: <https://w3id.org/bot#>
+            
+          DELETE DATA {
+            <${buildingName}> a bot:Building .
+          }
+      `;
+
+      oxigraphStore.update(deleteBotBuilding);
       return;
     }),
 });
