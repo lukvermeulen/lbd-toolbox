@@ -1,4 +1,5 @@
 import { Modal } from "~/components/modal/modal";
+import { splitIriToIdAndName } from "~/utils/formatting";
 import { trpc } from "~/utils/trpc";
 import { HasStoreyForm, HasStoreyFormValues } from "./has-storey-form";
 
@@ -25,9 +26,14 @@ export function HasStoreyModal({ open, setOpen, name }: HasStoreyModalProps) {
     return <></>;
   }
 
+  const storeyList = storeys.data?.map((storey) => {
+    const { id, displayName } = splitIriToIdAndName(storey);
+    return { value: id, label: displayName };
+  });
+
   return (
     <Modal open={open} setOpen={setOpen} title="Add bot:hasStorey link">
-      <HasStoreyForm data={storeys.data} submitFormValues={submitFormValues} />
+      <HasStoreyForm data={storeyList} submitFormValues={submitFormValues} />
     </Modal>
   );
 }

@@ -2,7 +2,7 @@ import { Button, Group, MultiSelect, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
 type HasStoreyFormProps = {
-  data: string[];
+  data: { value: string; label: string }[];
   submitFormValues: (values: HasStoreyFormValues) => void;
 };
 
