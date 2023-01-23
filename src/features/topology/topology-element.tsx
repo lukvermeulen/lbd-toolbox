@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import { IconDots, IconInfoCircle, IconPencil, IconTrash } from "@tabler/icons";
 import { useState } from "react";
+import { splitIriToIdAndName } from "~/utils/formatting";
 import { trpc } from "~/utils/trpc";
 import { EditDrawer } from "./edit-drawer";
 import { InfoDrawer } from "./info-drawer";
@@ -28,8 +29,7 @@ export function TopologyElement({
 }: TopologyElementProps) {
   const [infoOpen, setInfoOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
-  const [id, ...restName] = name.split("_");
-  const displayName = restName.join("_");
+  const { id, displayName } = splitIriToIdAndName(name);
 
   return (
     <>
