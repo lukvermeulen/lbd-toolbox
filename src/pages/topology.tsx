@@ -1,64 +1,13 @@
-import {
-  Accordion,
-  ActionIcon,
-  Card,
-  Text,
-  Group,
-  Menu,
-  Image,
-  SimpleGrid,
-  Button,
-  AspectRatio,
-  Anchor,
-  Space,
-  Modal,
-  useMantineTheme,
-} from "@mantine/core";
-import { useState } from "react";
+import { Accordion, Text, SimpleGrid, Anchor, Space } from "@mantine/core";
+
 import { AddElement } from "~/components/elements/add-element";
 import { BuildingModal } from "~/features/topology/building/building-modal";
 import { SiteModal } from "~/features/topology/site/site-modal";
 import { SpaceModal } from "~/features/topology/space/space-modal";
 import { StoreyModal } from "~/features/topology/storey/storey-modal";
+import { TopologyElement } from "~/features/topology/topology-element";
 import { ZoneModal } from "~/features/topology/zone/zone-modal";
 import { trpc } from "../utils/trpc";
-
-function TopologyElement() {
-  return (
-    <Card shadow={"xs"}>
-      <AspectRatio ratio={5 / 3} sx={{ maxWidth: 300 }} mx="auto">
-        <Image
-          src="https://images.unsplash.com/photo-1527118732049-c88155f2107c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80"
-          alt="Panda"
-        />
-      </AspectRatio>
-      {/* <Menu withinPortal position="bottom-end" shadow="sm">
-        <Menu.Target>
-          <ActionIcon>
-            <IconDots size={16} />
-          </ActionIcon>
-        </Menu.Target>
-
-        <Menu.Dropdown>
-          <Menu.Item icon={<IconFileZip size={14} />}>Download zip</Menu.Item>
-          <Menu.Item icon={<IconEye size={14} />}>Preview all</Menu.Item>
-          <Menu.Item icon={<IconTrash size={14} />} color="red">
-            Delete all
-          </Menu.Item>
-        </Menu.Dropdown>
-      </Menu>
-
-      <Text>
-        since last visit, review them to select which one should be added to
-        your gallery
-      </Text>
-
-      <Card.Section mt="sm">
-        <Image src="https://images.unsplash.com/photo-1579263477001-7a703f1974e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" />
-      </Card.Section> */}
-    </Card>
-  );
-}
 
 export default function TopologyPage() {
   const zones = trpc.topology.zone.list.useQuery();
@@ -112,7 +61,7 @@ export default function TopologyPage() {
 
               {!zones.data && <Text>Loading...</Text>}
               {zones.data?.map((zone) => (
-                <TopologyElement />
+                <TopologyElement name={zone} category="bot:Zone" />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -130,7 +79,7 @@ export default function TopologyPage() {
 
               {!sites.data && <Text>Loading...</Text>}
               {sites.data?.map((site) => (
-                <TopologyElement />
+                <TopologyElement name={site} category="bot:Site" />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -148,7 +97,7 @@ export default function TopologyPage() {
               />
               {!buildings.data && <Text>Loading...</Text>}
               {buildings.data?.map((building) => (
-                <TopologyElement />
+                <TopologyElement name={building} category="bot:Building" />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -166,7 +115,7 @@ export default function TopologyPage() {
 
               {!storeys.data && <Text>Loading...</Text>}
               {storeys.data?.map((storey) => (
-                <TopologyElement />
+                <TopologyElement name={storey} category="bot:Storey" />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -183,7 +132,7 @@ export default function TopologyPage() {
               />
               {!spaces.data && <Text>Loading...</Text>}
               {spaces.data?.map((space) => (
-                <TopologyElement />
+                <TopologyElement name={space} category="bot:Space" />
               ))}
             </SimpleGrid>
           </Accordion.Panel>

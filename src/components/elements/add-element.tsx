@@ -16,15 +16,15 @@ export function AddElement<V>({ Modal, submitValues }: AddElementProps<V>) {
 
   return (
     <Card>
-      <AspectRatio ratio={5 / 3} sx={{ maxWidth: 300 }} mx="auto">
-        <Button variant="outline" onClick={() => setOpen(true)}>
-          <IconPlus />
-        </Button>
+      {/* <AspectRatio ratio={5 / 3} sx={{ maxWidth: 300 }} mx="auto"> */}
+      <Button variant="outline" onClick={() => setOpen(true)}>
+        <IconPlus />
+      </Button>
 
-        {Modal && (
-          <Modal open={open} setOpen={setOpen} submitValues={submitValues} />
-        )}
-      </AspectRatio>
+      {Modal && (
+        <Modal open={open} setOpen={setOpen} submitValues={submitValues} />
+      )}
+      {/* </AspectRatio> */}
     </Card>
   );
 }
