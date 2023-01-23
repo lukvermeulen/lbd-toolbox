@@ -11,8 +11,16 @@ import {
   AspectRatio,
   Anchor,
   Space,
+  Modal,
+  useMantineTheme,
 } from "@mantine/core";
+import { useState } from "react";
 import { AddElement } from "~/components/elements/add-element";
+import { BuildingModal } from "~/features/topology/building/building-modal";
+import { SiteModal } from "~/features/topology/site/site-modal";
+import { SpaceModal } from "~/features/topology/space/space-modal";
+import { StoreyModal } from "~/features/topology/storey/storey-modal";
+import { ZoneModal } from "~/features/topology/zone/zone-modal";
 import { trpc } from "../utils/trpc";
 
 function TopologyElement() {
@@ -53,11 +61,6 @@ function TopologyElement() {
 }
 
 export default function TopologyPage() {
-  const buildings = trpc.topology.building.list.useQuery();
-  const buildingMutation = trpc.topology.building.add.useMutation({
-    onSuccess: buildings.refetch,
-  });
-
   const zones = trpc.topology.zone.list.useQuery();
   const zoneMutation = trpc.topology.zone.add.useMutation({
     onSuccess: zones.refetch,
@@ -66,6 +69,11 @@ export default function TopologyPage() {
   const sites = trpc.topology.site.list.useQuery();
   const siteMutation = trpc.topology.site.add.useMutation({
     onSuccess: sites.refetch,
+  });
+
+  const buildings = trpc.topology.building.list.useQuery();
+  const buildingMutation = trpc.topology.building.add.useMutation({
+    onSuccess: buildings.refetch,
   });
 
   const storeys = trpc.topology.storey.list.useQuery();
@@ -98,8 +106,10 @@ export default function TopologyPage() {
             both located in this world and has a 3D spatial extent.
             <SimpleGrid cols={4}>
               <AddElement
-                action={() => zoneMutation.mutate({ name: "Zone" })}
+                Modal={ZoneModal}
+                submitValues={zoneMutation.mutate}
               />
+
               {!zones.data && <Text>Loading...</Text>}
               {zones.data?.map((zone) => (
                 <TopologyElement />
@@ -114,10 +124,10 @@ export default function TopologyPage() {
             An area containing one or more buildings.
             <SimpleGrid cols={4}>
               <AddElement
-                action={() => {
-                  siteMutation.mutate({ name: "Site" });
-                }}
+                Modal={SiteModal}
+                submitValues={siteMutation.mutate}
               />
+
               {!sites.data && <Text>Loading...</Text>}
               {sites.data?.map((site) => (
                 <TopologyElement />
@@ -133,9 +143,8 @@ export default function TopologyPage() {
             spatial structure.
             <SimpleGrid cols={4}>
               <AddElement
-                action={() => {
-                  buildingMutation.mutate({ name: "Building" });
-                }}
+                Modal={BuildingModal}
+                submitValues={buildingMutation.mutate}
               />
               {!buildings.data && <Text>Loading...</Text>}
               {buildings.data?.map((building) => (
@@ -151,10 +160,10 @@ export default function TopologyPage() {
             A level part of a building.
             <SimpleGrid cols={4}>
               <AddElement
-                action={() => {
-                  storeyMutation.mutate({ name: "Storey" });
-                }}
+                Modal={StoreyModal}
+                submitValues={storeyMutation.mutate}
               />
+
               {!storeys.data && <Text>Loading...</Text>}
               {storeys.data?.map((storey) => (
                 <TopologyElement />
@@ -169,9 +178,8 @@ export default function TopologyPage() {
             A limited three-dimensional extent defined physically or notionally.
             <SimpleGrid cols={4}>
               <AddElement
-                action={() => {
-                  spaceMutation.mutate({ name: "Space" });
-                }}
+                Modal={SpaceModal}
+                submitValues={spaceMutation.mutate}
               />
               {!spaces.data && <Text>Loading...</Text>}
               {spaces.data?.map((space) => (
