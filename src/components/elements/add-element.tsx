@@ -1,4 +1,4 @@
-import { AspectRatio, Button, Card } from "@mantine/core";
+import { AspectRatio, Button, Card, Group } from "@mantine/core";
 import { IconPlus } from "@tabler/icons";
 
 type AddElementProps = {
@@ -13,6 +13,18 @@ export function AddElement({ action }: AddElementProps) {
           <IconPlus />
         </Button>
       </AspectRatio>
+    </Card>
+  );
+}
+
+export function AddElementList({ action }: AddElementProps) {
+  return (
+    <Card>
+      <Group position="left">
+        <Button variant="outline" onClick={action}>
+          <IconPlus />
+        </Button>
+      </Group>
     </Card>
   );
 }
