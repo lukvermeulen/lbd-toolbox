@@ -11,6 +11,7 @@ import {
 import { IconDots, IconInfoCircle, IconPencil, IconTrash } from "@tabler/icons";
 import { useState } from "react";
 import { trpc } from "~/utils/trpc";
+import { EditDrawer } from "./edit-drawer";
 import { InfoDrawer } from "./info-drawer";
 
 type TopologyElementProps = {
@@ -26,7 +27,9 @@ export function TopologyElement({
   LinkMenu,
 }: TopologyElementProps) {
   const [infoOpen, setInfoOpen] = useState(false);
-  const [id, ...displayName] = name.split("_");
+  const [editOpen, setEditOpen] = useState(false);
+  const [id, ...restName] = name.split("_");
+  const displayName = restName.join("_");
 
   return (
     <>
@@ -42,7 +45,12 @@ export function TopologyElement({
               </Menu.Target>
 
               <Menu.Dropdown>
-                <Menu.Item icon={<IconPencil size={14} />}>Edit</Menu.Item>
+                <Menu.Item
+                  icon={<IconPencil size={14} />}
+                  onClick={() => setEditOpen(true)}
+                >
+                  Edit
+                </Menu.Item>
                 <Menu.Item
                   icon={<IconTrash size={14} />}
                   color="red"
@@ -58,7 +66,7 @@ export function TopologyElement({
 
           <Group position="center">
             <Tooltip label={id} withinPortal>
-              <Title order={3}>{displayName.join("_")}</Title>
+              <Title order={3}>{displayName}</Title>
             </Tooltip>
           </Group>
 
@@ -74,7 +82,12 @@ export function TopologyElement({
       <InfoDrawer
         open={infoOpen}
         setOpen={setInfoOpen}
-        elementInfo={{ displayName: displayName.join("_"), name: name }}
+        elementInfo={{ displayName: displayName, name: name }}
+      />
+      <EditDrawer
+        open={editOpen}
+        setOpen={setEditOpen}
+        elementInfo={{ displayName: displayName, name: name }}
       />
     </>
   );

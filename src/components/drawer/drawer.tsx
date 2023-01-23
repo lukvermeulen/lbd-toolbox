@@ -5,9 +5,16 @@ type DrawerProps = {
   setOpen: (open: boolean) => void;
   title: string;
   children?: React.ReactNode;
+  position?: "left" | "right";
 };
 
-export function Drawer({ open, setOpen, title, children }: DrawerProps) {
+export function Drawer({
+  open,
+  setOpen,
+  title,
+  children,
+  position,
+}: DrawerProps) {
   const theme = useMantineTheme();
 
   return (
@@ -17,6 +24,7 @@ export function Drawer({ open, setOpen, title, children }: DrawerProps) {
       title={title}
       padding="xl"
       size="xl"
+      position={position}
       overlayColor={
         theme.colorScheme === "dark"
           ? theme.colors.dark[9]
