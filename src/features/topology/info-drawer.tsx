@@ -14,7 +14,7 @@ export function InfoDrawer({ open, setOpen, elementInfo }: InfoDrawerProps) {
   return (
     <Drawer open={open} setOpen={setOpen} title="Information">
       <Stack>
-        <Title>{elementInfo.displayName}</Title>
+        <Title order={2}>{elementInfo.displayName}</Title>
         <Text>IRI: {elementInfo.name}</Text>
       </Stack>
     </Drawer>

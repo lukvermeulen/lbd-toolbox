@@ -7,23 +7,21 @@ import {
   ActionIcon,
   Title,
   Tooltip,
-  Drawer,
 } from "@mantine/core";
-import {
-  IconDots,
-  IconInfoCircle,
-  IconLine,
-  IconPencil,
-  IconTrash,
-} from "@tabler/icons";
+import { IconDots, IconInfoCircle, IconPencil, IconTrash } from "@tabler/icons";
 import { useState } from "react";
 import { InfoDrawer } from "./info-drawer";
 
 type TopologyElementProps = {
   category: string;
   name: string;
+  LinkMenu?: React.ElementType;
 };
-export function TopologyElement({ category, name }: TopologyElementProps) {
+export function TopologyElement({
+  category,
+  name,
+  LinkMenu,
+}: TopologyElementProps) {
   const [infoOpen, setInfoOpen] = useState(false);
   const [id, ...displayName] = name.split("_");
 
@@ -66,17 +64,7 @@ export function TopologyElement({ category, name }: TopologyElementProps) {
               <IconInfoCircle size={18} />
             </ActionIcon>
 
-            <Menu withinPortal position="bottom-start" shadow="sm">
-              <Menu.Target>
-                <ActionIcon>
-                  <IconLine size={18} />
-                </ActionIcon>
-              </Menu.Target>
-
-              <Menu.Dropdown>
-                <Menu.Item icon={<IconPencil size={14} />}>hasStorey</Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
+            {LinkMenu && <LinkMenu />}
           </Group>
         </Stack>
       </Card>

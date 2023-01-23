@@ -1,11 +1,16 @@
 import { Accordion, Text, SimpleGrid, Anchor, Space } from "@mantine/core";
 
 import { AddElement } from "~/components/elements/add-element";
+import { BuildingLinkMenu } from "~/features/topology/building/building-link-menu";
 import { BuildingModal } from "~/features/topology/building/building-modal";
+import { SiteLinkMenu } from "~/features/topology/site/site-link-menu";
 import { SiteModal } from "~/features/topology/site/site-modal";
+import { SpaceLinkMenu } from "~/features/topology/space/space-link-menu";
 import { SpaceModal } from "~/features/topology/space/space-modal";
+import { StoreyLinkMenu } from "~/features/topology/storey/storey-link-menu";
 import { StoreyModal } from "~/features/topology/storey/storey-modal";
 import { TopologyElement } from "~/features/topology/topology-element";
+import { ZoneLinkMenu } from "~/features/topology/zone/zone-link-menu";
 import { ZoneModal } from "~/features/topology/zone/zone-modal";
 import { trpc } from "../utils/trpc";
 
@@ -61,7 +66,11 @@ export default function TopologyPage() {
 
               {!zones.data && <Text>Loading...</Text>}
               {zones.data?.map((zone) => (
-                <TopologyElement name={zone} category="bot:Zone" />
+                <TopologyElement
+                  name={zone}
+                  category="bot:Zone"
+                  LinkMenu={ZoneLinkMenu}
+                />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -79,7 +88,11 @@ export default function TopologyPage() {
 
               {!sites.data && <Text>Loading...</Text>}
               {sites.data?.map((site) => (
-                <TopologyElement name={site} category="bot:Site" />
+                <TopologyElement
+                  name={site}
+                  category="bot:Site"
+                  LinkMenu={SiteLinkMenu}
+                />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -97,7 +110,11 @@ export default function TopologyPage() {
               />
               {!buildings.data && <Text>Loading...</Text>}
               {buildings.data?.map((building) => (
-                <TopologyElement name={building} category="bot:Building" />
+                <TopologyElement
+                  name={building}
+                  category="bot:Building"
+                  LinkMenu={BuildingLinkMenu}
+                />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -115,7 +132,11 @@ export default function TopologyPage() {
 
               {!storeys.data && <Text>Loading...</Text>}
               {storeys.data?.map((storey) => (
-                <TopologyElement name={storey} category="bot:Storey" />
+                <TopologyElement
+                  name={storey}
+                  category="bot:Storey"
+                  LinkMenu={StoreyLinkMenu}
+                />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -132,7 +153,11 @@ export default function TopologyPage() {
               />
               {!spaces.data && <Text>Loading...</Text>}
               {spaces.data?.map((space) => (
-                <TopologyElement name={space} category="bot:Space" />
+                <TopologyElement
+                  name={space}
+                  category="bot:Space"
+                  LinkMenu={SpaceLinkMenu}
+                />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
