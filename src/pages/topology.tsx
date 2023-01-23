@@ -90,11 +90,7 @@ export default function TopologyPage() {
       </Text>
       <Space h="md" />
 
-      <Accordion
-        defaultValue={["site", "zone"]}
-        variant="separated"
-        multiple={true}
-      >
+      <Accordion defaultValue={[]} variant="separated" multiple={true}>
         <Accordion.Item value="zone">
           <Accordion.Control>bot:Zone</Accordion.Control>
           <Accordion.Panel>
