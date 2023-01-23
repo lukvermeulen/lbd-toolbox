@@ -24,6 +24,7 @@ export function BuildingForm({ submitFormValues }: BuildingFormProps) {
     <form onSubmit={form.onSubmit(submitForm)}>
       <TextInput
         withAsterisk
+        required
         label="Name"
         placeholder="Building name"
         {...form.getInputProps("name")}

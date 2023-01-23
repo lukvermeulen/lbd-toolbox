@@ -24,6 +24,7 @@ export function ZoneForm({ submitFormValues }: ZoneFormProps) {
     <form onSubmit={form.onSubmit(submitForm)}>
       <TextInput
         withAsterisk
+        required
         label="Name"
         placeholder="Zone name"
         {...form.getInputProps("name")}

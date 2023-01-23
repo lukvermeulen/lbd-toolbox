@@ -24,6 +24,7 @@ export function SiteForm({ submitFormValues }: SiteFormProps) {
     <form onSubmit={form.onSubmit(submitForm)}>
       <TextInput
         withAsterisk
+        required
         label="Name"
         placeholder="Site name"
         {...form.getInputProps("name")}

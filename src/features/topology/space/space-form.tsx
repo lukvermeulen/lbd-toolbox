@@ -24,6 +24,7 @@ export function SpaceForm({ submitFormValues }: SpaceFormProps) {
     <form onSubmit={form.onSubmit(submitForm)}>
       <TextInput
         withAsterisk
+        required
         label="Name"
         placeholder="Space name"
         {...form.getInputProps("name")}

@@ -24,6 +24,7 @@ export function StoreyForm({ submitFormValues }: StoreyFormProps) {
     <form onSubmit={form.onSubmit(submitForm)}>
       <TextInput
         withAsterisk
+        required
         label="Name"
         placeholder="Storey name"
         {...form.getInputProps("name")}
