@@ -7,24 +7,29 @@ export const pictureRouter = router({
   list: publicProcedure.query(() => {
     const listPictures = `
       PREFIX : <http://example.org/>
-      SELECT ?s WHERE {
+      SELECT ?s ?date WHERE {
           << ?s a :representation >>
-              :representationType :picture .
+              :representationType :picture ;
+              :creationDate ?date;
       }
       ORDER BY ASC(?s)
     `;
     const pictures = oxigraphStore.query(listPictures);
 
-    const pictureList = pictures.map(
-      (picture: any) => picture.get("s").value
-    ) as string[];
+    const pictureList = pictures.map((picture: any) => ({
+      name: picture.get("s").value,
+      date: picture.get("date").value,
+    })) as { name: string; date: string }[];
+
     return pictureList;
   }),
+
   byId: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ input }) => {
       return input.id;
     }),
+
   add: publicProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async ({ input }) => {
@@ -39,16 +44,38 @@ export const pictureRouter = router({
 
           << ?newRep a :representation >>
             :representationType :picture ;
-            :creationDate ?currentXsdDate .
+            :creationDate ?currentDate .
         }
         WHERE {
           BIND(:${pictureName} AS ?newRep) .
-          BIND( CONCAT( year(?currentDateTime), "-", month(?currentDateTime), "-", day(?currentDateTime) ) AS ?currentDateString ) .
-          BIND( xsd:date(?currentDateString) AS ?currentXsdDate )
+          BIND( xsd:dateTime(NOW()) AS ?currentDate ) .
         }
       `;
 
       oxigraphStore.update(addPicture);
+      return;
+    }),
+
+  remove: publicProcedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ input }) => {
+      const pictureName = input.name;
+      console.log(pictureName);
+      const deletePicture = `
+          PREFIX : <http://example.org/>
+          PREFIX bot: <https://w3id.org/bot#>
+            
+          DELETE {
+            <${pictureName}> a :representation .
+
+            << <${pictureName}> a :representation >>
+            :representationType :picture ;
+            :creationDate ?creationDate .
+          }
+          WHERE {}
+      `;
+
+      oxigraphStore.update(deletePicture);
       return;
     }),
 });

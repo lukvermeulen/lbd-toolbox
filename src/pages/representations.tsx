@@ -9,48 +9,16 @@ import {
   Text,
 } from "@mantine/core";
 import { AddElement } from "~/components/elements/add-element";
+import { LdElement } from "~/features/ld-element";
+import { PictureModal } from "~/features/representation/picture/picture-modal";
 import { trpc } from "../utils/trpc";
-
-function RepresentationElement() {
-  return (
-    <Card shadow={"xs"}>
-      <AspectRatio ratio={5 / 3} sx={{ maxWidth: 300 }} mx="auto">
-        <Image
-          src="https://images.unsplash.com/photo-1527118732049-c88155f2107c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80"
-          alt="Panda"
-        />
-      </AspectRatio>
-      {/* <Menu withinPortal position="bottom-end" shadow="sm">
-        <Menu.Target>
-          <ActionIcon>
-            <IconDots size={16} />
-          </ActionIcon>
-        </Menu.Target>
-
-        <Menu.Dropdown>
-          <Menu.Item icon={<IconFileZip size={14} />}>Download zip</Menu.Item>
-          <Menu.Item icon={<IconEye size={14} />}>Preview all</Menu.Item>
-          <Menu.Item icon={<IconTrash size={14} />} color="red">
-            Delete all
-          </Menu.Item>
-        </Menu.Dropdown>
-      </Menu>
-
-      <Text>
-        since last visit, review them to select which one should be added to
-        your gallery
-      </Text>
-
-      <Card.Section mt="sm">
-        <Image src="https://images.unsplash.com/photo-1579263477001-7a703f1974e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" />
-      </Card.Section> */}
-    </Card>
-  );
-}
 
 export default function RepresentationsPage() {
   const pictures = trpc.representation.picture.list.useQuery();
   const pictureMutation = trpc.representation.picture.add.useMutation({
+    onSuccess: pictures.refetch,
+  });
+  const pictureDeleteMutation = trpc.representation.picture.remove.useMutation({
     onSuccess: pictures.refetch,
   });
 
@@ -90,11 +58,18 @@ export default function RepresentationsPage() {
             Images taken by camera.
             <SimpleGrid cols={4}>
               <AddElement
-                action={() => pictureMutation.mutate({ name: "Picture" })}
+                Modal={PictureModal}
+                submitValues={pictureMutation.mutate}
               />
               {!pictures.data && <Text>Loading...</Text>}
-              {pictures.data?.map((picture) => (
-                <RepresentationElement />
+              {pictures.data?.map((picture, index) => (
+                <LdElement
+                  name={picture.name}
+                  properties={{ date: picture.date }}
+                  category="picture"
+                  key={index}
+                  deleteAction={pictureDeleteMutation.mutate}
+                />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -106,11 +81,12 @@ export default function RepresentationsPage() {
             and polygons.
             <SimpleGrid cols={4}>
               <AddElement
-                action={() => meshMutation.mutate({ name: "Mesh" })}
+                Modal={PictureModal}
+                submitValues={meshMutation.mutate}
               />
               {!meshes.data && <Text>Loading...</Text>}
               {meshes.data?.map((mesh) => (
-                <RepresentationElement />
+                <LdElement />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -121,11 +97,12 @@ export default function RepresentationsPage() {
             Boundary representations, a 3D object representation.
             <SimpleGrid cols={4}>
               <AddElement
-                action={() => brepMutation.mutate({ name: "BREP" })}
+                Modal={PictureModal}
+                submitValues={brepMutation.mutate}
               />
               {!breps.data && <Text>Loading...</Text>}
               {breps.data?.map((brep) => (
-                <RepresentationElement />
+                <LdElement />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -141,7 +118,7 @@ export default function RepresentationsPage() {
               />
               {!pointclouds.data && <Text>Loading...</Text>}
               {pointclouds.data?.map((pointcloud) => (
-                <RepresentationElement />
+                <LdElement />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -152,11 +129,12 @@ export default function RepresentationsPage() {
             Two-Dimensional representations e.g. as line drawing.
             <SimpleGrid cols={4}>
               <AddElement
-                action={() => planMutation.mutate({ name: "Plan" })}
+                Modal={PictureModal}
+                submitValues={planMutation.mutate}
               />
               {!plans.data && <Text>Loading...</Text>}
               {plans.data?.map((plan) => (
-                <RepresentationElement />
+                <LdElement />
               ))}
             </SimpleGrid>
           </Accordion.Panel>

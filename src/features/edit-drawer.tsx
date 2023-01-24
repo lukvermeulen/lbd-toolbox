@@ -20,7 +20,6 @@ export function EditDrawer({ open, setOpen, elementInfo }: EditDrawerProps) {
     >
       <Stack>
         <Title order={2}>{elementInfo.displayName}</Title>
-        <Text>IRI: {elementInfo.name}</Text>
       </Stack>
     </Drawer>
   );

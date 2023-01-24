@@ -20,30 +20,33 @@ import { splitIriToIdAndName } from "~/utils/formatting";
 import { EditDrawer } from "./edit-drawer";
 import { InfoDrawer } from "./info-drawer";
 
-type TopologyElementProps = {
+type LdElementProps = {
   category: string;
   name: string;
+  properties?: { [key: string]: string };
   deleteAction: (input: { name: string }) => void;
-  selectAction: (action: { type: string; item: string | string[] }) => void;
-  actionType: string;
-  selected: boolean;
+  selectAction?: (action: { type: string; item: string | string[] }) => void;
+  actionType?: string;
+  selected?: boolean;
   LinkMenu?: React.ElementType;
 };
-export function TopologyElement({
+export function LdElement({
   category,
   name,
+  properties,
   deleteAction,
   selectAction,
   actionType,
   selected,
   LinkMenu,
-}: TopologyElementProps) {
+}: LdElementProps) {
   const [infoOpen, setInfoOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const { id, displayName } = splitIriToIdAndName(name);
 
   function selectElement() {
-    selectAction({ type: actionType, item: name });
+    if (selectAction && actionType)
+      selectAction({ type: actionType, item: name });
   }
 
   return (
@@ -72,13 +75,6 @@ export function TopologyElement({
               </Menu.Target>
 
               <Menu.Dropdown>
-                <Menu.Item
-                  icon={<IconEye size={14} />}
-                  onClick={() => setEditOpen(true)}
-                >
-                  Filter storeys‚
-                </Menu.Item>
-
                 <Menu.Item
                   icon={<IconPencil size={14} />}
                   onClick={() => setEditOpen(true)}
@@ -118,6 +114,7 @@ export function TopologyElement({
         open={infoOpen}
         setOpen={setInfoOpen}
         elementInfo={{ displayName: displayName, name: name }}
+        properties={properties}
       />
       <EditDrawer
         open={editOpen}

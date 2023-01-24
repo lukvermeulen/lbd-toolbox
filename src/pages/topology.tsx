@@ -10,7 +10,7 @@ import { SpaceLinkMenu } from "~/features/topology/space/space-link-menu";
 import { SpaceModal } from "~/features/topology/space/space-modal";
 import { StoreyLinkMenu } from "~/features/topology/storey/storey-link-menu";
 import { StoreyModal } from "~/features/topology/storey/storey-modal";
-import { TopologyElement } from "~/features/topology/topology-element";
+import { LdElement } from "~/features/ld-element";
 import { ZoneLinkMenu } from "~/features/topology/zone/zone-link-menu";
 import { ZoneModal } from "~/features/topology/zone/zone-modal";
 import { trpc } from "../utils/trpc";
@@ -170,7 +170,7 @@ export default function TopologyPage() {
 
               {!zones.data && <Text>Loading...</Text>}
               {zones.data?.map((zone, index) => (
-                <TopologyElement
+                <LdElement
                   key={index}
                   name={zone}
                   category="bot:Zone"
@@ -197,7 +197,7 @@ export default function TopologyPage() {
 
               {!sites.data && <Text>Loading...</Text>}
               {sites.data?.map((site, index) => (
-                <TopologyElement
+                <LdElement
                   key={index}
                   name={site}
                   category="bot:Site"
@@ -224,7 +224,7 @@ export default function TopologyPage() {
               />
               {!buildings.data && <Text>Loading...</Text>}
               {buildings.data?.map((building, index) => (
-                <TopologyElement
+                <LdElement
                   key={index}
                   name={building}
                   category="bot:Building"
@@ -251,7 +251,7 @@ export default function TopologyPage() {
 
               {!storeys.data && <Text>Loading...</Text>}
               {storeys.data?.map((storey, index) => (
-                <TopologyElement
+                <LdElement
                   key={index}
                   name={storey}
                   category="bot:Storey"
@@ -277,7 +277,7 @@ export default function TopologyPage() {
               />
               {!spaces.data && <Text>Loading...</Text>}
               {spaces.data?.map((space, index) => (
-                <TopologyElement
+                <LdElement
                   key={index}
                   name={space}
                   category="bot:Space"
