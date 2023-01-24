@@ -7,6 +7,7 @@ import {
   ActionIcon,
   Title,
   Tooltip,
+  BackgroundImage,
 } from "@mantine/core";
 import {
   IconDots,
@@ -64,51 +65,53 @@ export function LdElement({
           };
         }}
       >
-        <Stack>
-          <Group position="apart">
-            <Text>{category}</Text>
-            <Menu withinPortal position="bottom-start" shadow="sm">
-              <Menu.Target>
-                <ActionIcon>
-                  <IconDots size={18} />
-                </ActionIcon>
-              </Menu.Target>
+        <BackgroundImage src={properties?.pictureUrl ?? ""} radius="sm">
+          <Stack>
+            <Group position="apart">
+              <Text>{category}</Text>
+              <Menu withinPortal position="bottom-start" shadow="sm">
+                <Menu.Target>
+                  <ActionIcon>
+                    <IconDots size={18} />
+                  </ActionIcon>
+                </Menu.Target>
 
-              <Menu.Dropdown>
-                <Menu.Item
-                  icon={<IconPencil size={14} />}
-                  onClick={() => setEditOpen(true)}
-                >
-                  Edit
-                </Menu.Item>
+                <Menu.Dropdown>
+                  <Menu.Item
+                    icon={<IconPencil size={14} />}
+                    onClick={() => setEditOpen(true)}
+                  >
+                    Edit
+                  </Menu.Item>
 
-                <Menu.Item
-                  icon={<IconTrash size={14} />}
-                  color="red"
-                  onClick={() => {
-                    deleteAction({ name });
-                  }}
-                >
-                  Delete
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </Group>
+                  <Menu.Item
+                    icon={<IconTrash size={14} />}
+                    color="red"
+                    onClick={() => {
+                      deleteAction({ name });
+                    }}
+                  >
+                    Delete
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </Group>
 
-          <Group position="center" onClick={selectElement}>
-            <Tooltip label={id} withinPortal>
-              <Title order={3}>{displayName}</Title>
-            </Tooltip>
-          </Group>
+            <Group position="center" onClick={selectElement}>
+              <Tooltip label={id} withinPortal>
+                <Title order={3}>{displayName}</Title>
+              </Tooltip>
+            </Group>
 
-          <Group position="apart">
-            <ActionIcon onClick={() => setInfoOpen(true)}>
-              <IconInfoCircle size={18} />
-            </ActionIcon>
+            <Group position="apart">
+              <ActionIcon onClick={() => setInfoOpen(true)}>
+                <IconInfoCircle size={18} />
+              </ActionIcon>
 
-            {LinkMenu && <LinkMenu name={name} />}
-          </Group>
-        </Stack>
+              {LinkMenu && <LinkMenu name={name} />}
+            </Group>
+          </Stack>
+        </BackgroundImage>
       </Card>
       <InfoDrawer
         open={infoOpen}

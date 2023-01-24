@@ -65,7 +65,10 @@ export default function RepresentationsPage() {
               {pictures.data?.map((picture, index) => (
                 <LdElement
                   name={picture.name}
-                  properties={{ date: picture.date }}
+                  properties={{
+                    date: picture.date,
+                    pictureUrl: picture.pictureUrl,
+                  }}
                   category="picture"
                   key={index}
                   deleteAction={pictureDeleteMutation.mutate}
