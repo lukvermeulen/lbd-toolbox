@@ -33,9 +33,9 @@ export default function ElementsPage() {
       <h1>Elements</h1>
       <Text>Show element, their properties and their meta information.</Text>
       <Space h="md" />
-      <AddElementList
+      {/* <AddElementList
         action={() => pictureMutation.mutate({ name: "Picture" })}
-      />
+      /> */}
       <Stack>
         {!elements.data && <Text>Loading...</Text>}
         {elements.data?.map((picture) => (

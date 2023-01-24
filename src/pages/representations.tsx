@@ -91,7 +91,8 @@ export default function RepresentationsPage() {
               />
               {!meshes.data && <Text>Loading...</Text>}
               {meshes.data?.map((mesh) => (
-                <LdElement />
+                // <LdElement />
+                <></>
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -107,7 +108,8 @@ export default function RepresentationsPage() {
               />
               {!breps.data && <Text>Loading...</Text>}
               {breps.data?.map((brep) => (
-                <LdElement />
+                <></>
+                // <LdElement />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -118,12 +120,14 @@ export default function RepresentationsPage() {
             A discrete set of data points in space, acquired e.g. by laser
             scanning or sfm.
             <SimpleGrid cols={4}>
-              <AddElement
+              <></>
+              {/* <AddElement
                 action={() => pointcloudMutatoin.mutate({ name: "Pointcloud" })}
-              />
+              /> */}
               {!pointclouds.data && <Text>Loading...</Text>}
               {pointclouds.data?.map((pointcloud) => (
-                <LdElement />
+                <></>
+                // <LdElement />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
@@ -139,7 +143,8 @@ export default function RepresentationsPage() {
               />
               {!plans.data && <Text>Loading...</Text>}
               {plans.data?.map((plan) => (
-                <LdElement />
+                <></>
+                // <LdElement />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
