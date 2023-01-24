@@ -27,33 +27,19 @@ export const storeyRouter = router({
       `;
       const botStoreys = oxigraphStore.query(listBotStoreys);
 
-      const debug = `
-        PREFIX : <http://example.org/>
-        PREFIX bot: <https://w3id.org/bot#>
-
-        SELECT ?s ?o WHERE {
-          ?s bot:hasStorey ?o .
-        }
-      `;
-      const debugResult = oxigraphStore.query(debug);
-      console.log(
-        debugResult.map((d: any) => ({
-          s: d.get("s").value,
-          o: d.get("o").value,
-        }))
-      );
-
       const storeyList = botStoreys.map(
         (storey: any) => storey.get("s").value
       ) as string[];
 
       return storeyList;
     }),
+
   byId: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ input }) => {
       return input.id;
     }),
+
   add: publicProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async ({ input }) => {
@@ -71,6 +57,7 @@ export const storeyRouter = router({
       oxigraphStore.update(addBotStorey);
       return;
     }),
+
   remove: publicProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async ({ input }) => {
@@ -88,6 +75,7 @@ export const storeyRouter = router({
       oxigraphStore.update(deleteBotStorey);
       return;
     }),
+
   hasStorey: publicProcedure
     .input(z.object({ name: z.string(), storeyName: z.string() }))
     .mutation(async ({ input }) => {

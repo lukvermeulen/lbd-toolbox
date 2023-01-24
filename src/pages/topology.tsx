@@ -147,12 +147,16 @@ export default function TopologyPage() {
               />
 
               {!zones.data && <Text>Loading...</Text>}
-              {zones.data?.map((zone) => (
+              {zones.data?.map((zone, index) => (
                 <TopologyElement
+                  key={index}
                   name={zone}
                   category="bot:Zone"
                   LinkMenu={ZoneLinkMenu}
                   deleteAction={zoneDeleteMutation.mutate}
+                  selectAction={() => {
+                    dispatch({ type: "zones", item: zone });
+                  }}
                 />
               ))}
             </SimpleGrid>
@@ -170,12 +174,16 @@ export default function TopologyPage() {
               />
 
               {!sites.data && <Text>Loading...</Text>}
-              {sites.data?.map((site) => (
+              {sites.data?.map((site, index) => (
                 <TopologyElement
+                  key={index}
                   name={site}
                   category="bot:Site"
                   LinkMenu={SiteLinkMenu}
                   deleteAction={siteDeleteMutation.mutate}
+                  selectAction={() => {
+                    dispatch({ type: "sites", item: site });
+                  }}
                 />
               ))}
             </SimpleGrid>
@@ -193,8 +201,9 @@ export default function TopologyPage() {
                 submitValues={buildingMutation.mutate}
               />
               {!buildings.data && <Text>Loading...</Text>}
-              {buildings.data?.map((building) => (
+              {buildings.data?.map((building, index) => (
                 <TopologyElement
+                  key={index}
                   name={building}
                   category="bot:Building"
                   LinkMenu={BuildingLinkMenu}
@@ -219,12 +228,16 @@ export default function TopologyPage() {
               />
 
               {!storeys.data && <Text>Loading...</Text>}
-              {storeys.data?.map((storey) => (
+              {storeys.data?.map((storey, index) => (
                 <TopologyElement
+                  key={index}
                   name={storey}
                   category="bot:Storey"
                   LinkMenu={StoreyLinkMenu}
                   deleteAction={storeyDeleteMutation.mutate}
+                  selectAction={() => {
+                    dispatch({ type: "storeys", item: storey });
+                  }}
                 />
               ))}
             </SimpleGrid>
@@ -241,12 +254,16 @@ export default function TopologyPage() {
                 submitValues={spaceMutation.mutate}
               />
               {!spaces.data && <Text>Loading...</Text>}
-              {spaces.data?.map((space) => (
+              {spaces.data?.map((space, index) => (
                 <TopologyElement
+                  key={index}
                   name={space}
                   category="bot:Space"
                   LinkMenu={SpaceLinkMenu}
                   deleteAction={spaceDeleteMutation.mutate}
+                  selectAction={() => {
+                    dispatch({ type: "spaces", item: space });
+                  }}
                 />
               ))}
             </SimpleGrid>
