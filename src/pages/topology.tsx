@@ -1,6 +1,5 @@
 import { Accordion, Text, SimpleGrid, Anchor, Space } from "@mantine/core";
 import { useEffect, useReducer } from "react";
-import { resourceLimits } from "worker_threads";
 
 import { AddElement } from "~/components/elements/add-element";
 import { BuildingLinkMenu } from "~/features/topology/building/building-link-menu";
@@ -27,7 +26,7 @@ export default function TopologyPage() {
 
   type QueryAction = {
     type: string;
-    item: string;
+    item: string | string[];
   };
 
   const initArg: QueryState = {
@@ -38,15 +37,19 @@ export default function TopologyPage() {
     spaces: [],
   };
 
-  function addOrRemove(array: string[], item: string) {
-    const exists = array.includes(item);
-
-    if (exists) {
-      return array.filter((arrayItem) => arrayItem !== item);
+  function addOrRemove(array: string[], item: string | string[]) {
+    if (Array.isArray(item)) {
+      return item;
     } else {
-      const result = array;
-      array.push(item);
-      return result;
+      const exists = array.includes(item);
+
+      if (exists) {
+        return array.filter((arrayItem) => arrayItem !== item);
+      } else {
+        const result = array;
+        array.push(item);
+        return result;
+      }
     }
   }
 
@@ -106,7 +109,9 @@ export default function TopologyPage() {
     onSuccess: storeys.refetch,
   });
 
-  const spaces = trpc.topology.space.list.useQuery();
+  const spaces = trpc.topology.space.list.useQuery({
+    storeys: queries.storeys,
+  });
   const spaceMutation = trpc.topology.space.add.useMutation({
     onSuccess: spaces.refetch,
   });
@@ -120,6 +125,7 @@ export default function TopologyPage() {
     buildings.refetch();
     storeys.refetch();
     spaces.refetch();
+    console.log(queries);
   }, [queries]);
 
   return (

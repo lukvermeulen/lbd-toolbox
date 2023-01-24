@@ -17,7 +17,6 @@ import {
 } from "@tabler/icons";
 import { useState } from "react";
 import { splitIriToIdAndName } from "~/utils/formatting";
-import { trpc } from "~/utils/trpc";
 import { EditDrawer } from "./edit-drawer";
 import { InfoDrawer } from "./info-drawer";
 
