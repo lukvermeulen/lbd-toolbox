@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import { AddElement } from "~/components/elements/add-element";
 import { LdElement } from "~/features/ld-element";
+import { PictureLinkMenu } from "~/features/representation/picture/picture-link-menu";
 import { PictureModal } from "~/features/representation/picture/picture-modal";
 import { trpc } from "../utils/trpc";
 
@@ -69,6 +70,7 @@ export default function RepresentationsPage() {
                     date: picture.date,
                     pictureUrl: picture.pictureUrl,
                   }}
+                  LinkMenu={PictureLinkMenu}
                   category="picture"
                   key={index}
                   deleteAction={pictureDeleteMutation.mutate}
