@@ -24,6 +24,7 @@ export const storeyRouter = router({
           ?s a bot:Storey .
           ${filter ?? ""}
         }
+        ORDER BY ASC(?s)
       `;
       const botStoreys = oxigraphStore.query(listBotStoreys);
 

@@ -4,24 +4,37 @@ import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
 
 export const buildingRouter = router({
-  list: publicProcedure.query(() => {
-    const listBotBuildings = `
+  list: publicProcedure
+    .input(z.optional(z.object({ sites: z.array(z.string()) })))
+    .query(({ input }) => {
+      const filter = input?.sites
+        .map(
+          (site) =>
+            `
+        <${site}> bot:hasBuilding ?s .
+      `
+        )
+        .join("");
+
+      const listBotBuildings = `
       PREFIX : <http://example.org/>
       PREFIX bot: <https://w3id.org/bot#>
 
       SELECT ?s WHERE {
-        ?s a bot:Building
+        ?s a bot:Building .
+        ${filter ?? ""}
       }
+      ORDER BY ASC(?s)
     `;
 
-    const botBuildings = oxigraphStore.query(listBotBuildings);
+      const botBuildings = oxigraphStore.query(listBotBuildings);
 
-    const buildingList = botBuildings.map(
-      (building: any) => building.get("s").value
-    ) as string[];
+      const buildingList = botBuildings.map(
+        (building: any) => building.get("s").value
+      ) as string[];
 
-    return buildingList;
-  }),
+      return buildingList;
+    }),
   byId: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ input }) => {
@@ -59,6 +72,25 @@ export const buildingRouter = router({
       `;
 
       oxigraphStore.update(deleteBotBuilding);
+      return;
+    }),
+
+  hasBuilding: publicProcedure
+    .input(z.object({ name: z.string(), buildingName: z.string() }))
+    .mutation(async ({ input }) => {
+      const elementName = input.name;
+      const buildingName = input.buildingName;
+
+      const addHasBuilding = `
+        PREFIX : <http://example.org/>
+        PREFIX bot: <https://w3id.org/bot#>
+         
+        INSERT DATA {
+          <${elementName}> bot:hasBuilding <${buildingName}> .
+        }
+      `;
+
+      oxigraphStore.update(addHasBuilding);
       return;
     }),
 });

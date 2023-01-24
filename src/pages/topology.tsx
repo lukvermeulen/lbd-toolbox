@@ -95,7 +95,9 @@ export default function TopologyPage() {
     onSuccess: sites.refetch,
   });
 
-  const buildings = trpc.topology.building.list.useQuery();
+  const buildings = trpc.topology.building.list.useQuery({
+    sites: queries.sites,
+  });
   const buildingMutation = trpc.topology.building.add.useMutation({
     onSuccess: buildings.refetch,
   });
@@ -174,9 +176,9 @@ export default function TopologyPage() {
                   category="bot:Zone"
                   LinkMenu={ZoneLinkMenu}
                   deleteAction={zoneDeleteMutation.mutate}
-                  selectAction={() => {
-                    dispatch({ type: "zones", item: zone });
-                  }}
+                  selectAction={dispatch}
+                  selected={queries.zones.includes(zone)}
+                  actionType="zones"
                 />
               ))}
             </SimpleGrid>
@@ -201,9 +203,9 @@ export default function TopologyPage() {
                   category="bot:Site"
                   LinkMenu={SiteLinkMenu}
                   deleteAction={siteDeleteMutation.mutate}
-                  selectAction={() => {
-                    dispatch({ type: "sites", item: site });
-                  }}
+                  selectAction={dispatch}
+                  selected={queries.sites.includes(site)}
+                  actionType="sites"
                 />
               ))}
             </SimpleGrid>
@@ -228,9 +230,9 @@ export default function TopologyPage() {
                   category="bot:Building"
                   LinkMenu={BuildingLinkMenu}
                   deleteAction={buildingDeleteMutation.mutate}
-                  selectAction={() => {
-                    dispatch({ type: "buildings", item: building });
-                  }}
+                  selectAction={dispatch}
+                  selected={queries.buildings.includes(building)}
+                  actionType="buildings"
                 />
               ))}
             </SimpleGrid>
@@ -255,9 +257,9 @@ export default function TopologyPage() {
                   category="bot:Storey"
                   LinkMenu={StoreyLinkMenu}
                   deleteAction={storeyDeleteMutation.mutate}
-                  selectAction={() => {
-                    dispatch({ type: "storeys", item: storey });
-                  }}
+                  selectAction={dispatch}
+                  selected={queries.storeys.includes(storey)}
+                  actionType="storeys"
                 />
               ))}
             </SimpleGrid>
@@ -274,19 +276,18 @@ export default function TopologyPage() {
                 submitValues={spaceMutation.mutate}
               />
               {!spaces.data && <Text>Loading...</Text>}
-              {!(selectMode && queries.storeys.length === 0) &&
-                spaces.data?.map((space, index) => (
-                  <TopologyElement
-                    key={index}
-                    name={space}
-                    category="bot:Space"
-                    LinkMenu={SpaceLinkMenu}
-                    deleteAction={spaceDeleteMutation.mutate}
-                    selectAction={() => {
-                      dispatch({ type: "spaces", item: space });
-                    }}
-                  />
-                ))}
+              {spaces.data?.map((space, index) => (
+                <TopologyElement
+                  key={index}
+                  name={space}
+                  category="bot:Space"
+                  LinkMenu={SpaceLinkMenu}
+                  deleteAction={spaceDeleteMutation.mutate}
+                  selectAction={dispatch}
+                  selected={queries.spaces.includes(space)}
+                  actionType="spaces"
+                />
+              ))}
             </SimpleGrid>
           </Accordion.Panel>
         </Accordion.Item>

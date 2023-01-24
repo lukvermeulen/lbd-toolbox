@@ -24,7 +24,9 @@ type TopologyElementProps = {
   category: string;
   name: string;
   deleteAction: (input: { name: string }) => void;
-  selectAction: () => void;
+  selectAction: (action: { type: string; item: string | string[] }) => void;
+  actionType: string;
+  selected: boolean;
   LinkMenu?: React.ElementType;
 };
 export function TopologyElement({
@@ -32,16 +34,16 @@ export function TopologyElement({
   name,
   deleteAction,
   selectAction,
+  actionType,
+  selected,
   LinkMenu,
 }: TopologyElementProps) {
   const [infoOpen, setInfoOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
-  const [selected, setSelected] = useState(false);
   const { id, displayName } = splitIriToIdAndName(name);
 
   function selectElement() {
-    setSelected((value) => !value);
-    selectAction();
+    selectAction({ type: actionType, item: name });
   }
 
   return (

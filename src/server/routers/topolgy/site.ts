@@ -12,6 +12,7 @@ export const siteRouter = router({
       SELECT ?s WHERE {
         ?s a bot:Site
       }
+      ORDER BY ASC(?s)
     `;
 
     const botSites = oxigraphStore.query(listBotSites);

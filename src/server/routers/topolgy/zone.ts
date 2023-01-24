@@ -14,6 +14,7 @@ export const zoneRouter = router({
       SELECT ?s WHERE {
         ?s a bot:Zone
       }
+      ORDER BY ASC(?s)
     `;
 
       const botZones = oxigraphStore.query(listBotZones);

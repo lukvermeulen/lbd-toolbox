@@ -24,6 +24,7 @@ export const spaceRouter = router({
         ?s a bot:Space .
         ${filter ?? ""}
       }
+      ORDER BY ASC(?s)
     `;
 
       const botSpaces = oxigraphStore.query(listBotSpaces);
