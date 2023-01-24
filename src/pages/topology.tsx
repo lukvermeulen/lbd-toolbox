@@ -1,5 +1,5 @@
 import { Accordion, Text, SimpleGrid, Anchor, Space } from "@mantine/core";
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 
 import { AddElement } from "~/components/elements/add-element";
 import { BuildingLinkMenu } from "~/features/topology/building/building-link-menu";
@@ -54,6 +54,7 @@ export default function TopologyPage() {
   }
 
   const [queries, dispatch] = useReducer(queryReducer, initArg);
+  const [selectMode, setSelectMode] = useState(false);
 
   function queryReducer(state: QueryState, action: QueryAction) {
     switch (action.type) {
@@ -67,7 +68,10 @@ export default function TopologyPage() {
           buildings: addOrRemove(state.buildings, action.item),
         };
       case "storeys":
-        return { ...state, storeys: addOrRemove(state.storeys, action.item) };
+        return {
+          ...state,
+          storeys: addOrRemove(state.storeys, action.item),
+        };
       case "spaces":
         return { ...state, spaces: addOrRemove(state.spaces, action.item) };
       default:
@@ -125,8 +129,18 @@ export default function TopologyPage() {
     buildings.refetch();
     storeys.refetch();
     spaces.refetch();
-    console.log(queries);
+
+    const selecting =
+      Object.values(queries).reduce((acc, cur) => {
+        return acc.concat(cur);
+      }).length > 0;
+    setSelectMode(selecting);
   }, [queries]);
+
+  useEffect(() => {
+    console.log(queries);
+    console.log(selectMode);
+  }, [selectMode, queries]);
 
   return (
     <>
@@ -260,18 +274,19 @@ export default function TopologyPage() {
                 submitValues={spaceMutation.mutate}
               />
               {!spaces.data && <Text>Loading...</Text>}
-              {spaces.data?.map((space, index) => (
-                <TopologyElement
-                  key={index}
-                  name={space}
-                  category="bot:Space"
-                  LinkMenu={SpaceLinkMenu}
-                  deleteAction={spaceDeleteMutation.mutate}
-                  selectAction={() => {
-                    dispatch({ type: "spaces", item: space });
-                  }}
-                />
-              ))}
+              {!(selectMode && queries.storeys.length === 0) &&
+                spaces.data?.map((space, index) => (
+                  <TopologyElement
+                    key={index}
+                    name={space}
+                    category="bot:Space"
+                    LinkMenu={SpaceLinkMenu}
+                    deleteAction={spaceDeleteMutation.mutate}
+                    selectAction={() => {
+                      dispatch({ type: "spaces", item: space });
+                    }}
+                  />
+                ))}
             </SimpleGrid>
           </Accordion.Panel>
         </Accordion.Item>
