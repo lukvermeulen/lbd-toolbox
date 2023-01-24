@@ -4,24 +4,51 @@ import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
 
 export const storeyRouter = router({
-  list: publicProcedure.query(() => {
-    const listBotStoreys = `
-      PREFIX : <http://example.org/>
-      PREFIX bot: <https://w3id.org/bot#>
+  list: publicProcedure
+    .input(z.optional(z.object({ buildings: z.array(z.string()) })))
+    .query(({ input }) => {
+      const filter = input?.buildings
+        .map(
+          (building) =>
+            `
+          <${building}> bot:hasStorey ?s .
+        `
+        )
+        .join("");
 
-      SELECT ?s WHERE {
-        ?s a bot:Storey
-      }
-    `;
+      const listBotStoreys = `
+        PREFIX : <http://example.org/>
+        PREFIX bot: <https://w3id.org/bot#>
 
-    const botStoreys = oxigraphStore.query(listBotStoreys);
+        SELECT ?s WHERE {
+          ?s a bot:Storey .
+          ${filter ?? ""}
+        }
+      `;
+      const botStoreys = oxigraphStore.query(listBotStoreys);
 
-    const storeyList = botStoreys.map(
-      (storey: any) => storey.get("s").value
-    ) as string[];
+      const debug = `
+        PREFIX : <http://example.org/>
+        PREFIX bot: <https://w3id.org/bot#>
 
-    return storeyList;
-  }),
+        SELECT ?s ?o WHERE {
+          ?s bot:hasStorey ?o .
+        }
+      `;
+      const debugResult = oxigraphStore.query(debug);
+      console.log(
+        debugResult.map((d: any) => ({
+          s: d.get("s").value,
+          o: d.get("o").value,
+        }))
+      );
+
+      const storeyList = botStoreys.map(
+        (storey: any) => storey.get("s").value
+      ) as string[];
+
+      return storeyList;
+    }),
   byId: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(({ input }) => {

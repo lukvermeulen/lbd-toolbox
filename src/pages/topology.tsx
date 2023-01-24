@@ -1,4 +1,6 @@
 import { Accordion, Text, SimpleGrid, Anchor, Space } from "@mantine/core";
+import { useEffect, useReducer } from "react";
+import { resourceLimits } from "worker_threads";
 
 import { AddElement } from "~/components/elements/add-element";
 import { BuildingLinkMenu } from "~/features/topology/building/building-link-menu";
@@ -15,6 +17,61 @@ import { ZoneModal } from "~/features/topology/zone/zone-modal";
 import { trpc } from "../utils/trpc";
 
 export default function TopologyPage() {
+  type QueryState = {
+    zones: string[];
+    sites: string[];
+    buildings: string[];
+    storeys: string[];
+    spaces: string[];
+  };
+
+  type QueryAction = {
+    type: string;
+    item: string;
+  };
+
+  const initArg: QueryState = {
+    zones: [],
+    sites: [],
+    buildings: [],
+    storeys: [],
+    spaces: [],
+  };
+
+  function addOrRemove(array: string[], item: string) {
+    const exists = array.includes(item);
+
+    if (exists) {
+      return array.filter((arrayItem) => arrayItem !== item);
+    } else {
+      const result = array;
+      array.push(item);
+      return result;
+    }
+  }
+
+  const [queries, dispatch] = useReducer(queryReducer, initArg);
+
+  function queryReducer(state: QueryState, action: QueryAction) {
+    switch (action.type) {
+      case "zones":
+        return { ...state, zones: addOrRemove(state.zones, action.item) };
+      case "sites":
+        return { ...state, sites: addOrRemove(state.sites, action.item) };
+      case "buildings":
+        return {
+          ...state,
+          buildings: addOrRemove(state.buildings, action.item),
+        };
+      case "storeys":
+        return { ...state, storeys: addOrRemove(state.storeys, action.item) };
+      case "spaces":
+        return { ...state, spaces: addOrRemove(state.spaces, action.item) };
+      default:
+        return state;
+    }
+  }
+
   const zones = trpc.topology.zone.list.useQuery();
   const zoneMutation = trpc.topology.zone.add.useMutation({
     onSuccess: zones.refetch,
@@ -39,7 +96,9 @@ export default function TopologyPage() {
     onSuccess: buildings.refetch,
   });
 
-  const storeys = trpc.topology.storey.list.useQuery();
+  const storeys = trpc.topology.storey.list.useQuery({
+    buildings: queries.buildings,
+  });
   const storeyMutation = trpc.topology.storey.add.useMutation({
     onSuccess: storeys.refetch,
   });
@@ -54,6 +113,14 @@ export default function TopologyPage() {
   const spaceDeleteMutation = trpc.topology.space.remove.useMutation({
     onSuccess: spaces.refetch,
   });
+
+  useEffect(() => {
+    zones.refetch();
+    sites.refetch();
+    buildings.refetch();
+    storeys.refetch();
+    spaces.refetch();
+  }, [queries]);
 
   return (
     <>
@@ -132,6 +199,9 @@ export default function TopologyPage() {
                   category="bot:Building"
                   LinkMenu={BuildingLinkMenu}
                   deleteAction={buildingDeleteMutation.mutate}
+                  selectAction={() => {
+                    dispatch({ type: "buildings", item: building });
+                  }}
                 />
               ))}
             </SimpleGrid>

@@ -8,7 +8,13 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import { IconDots, IconInfoCircle, IconPencil, IconTrash } from "@tabler/icons";
+import {
+  IconDots,
+  IconEye,
+  IconInfoCircle,
+  IconPencil,
+  IconTrash,
+} from "@tabler/icons";
 import { useState } from "react";
 import { splitIriToIdAndName } from "~/utils/formatting";
 import { trpc } from "~/utils/trpc";
@@ -19,21 +25,41 @@ type TopologyElementProps = {
   category: string;
   name: string;
   deleteAction: (input: { name: string }) => void;
+  selectAction: () => void;
   LinkMenu?: React.ElementType;
 };
 export function TopologyElement({
   category,
   name,
   deleteAction,
+  selectAction,
   LinkMenu,
 }: TopologyElementProps) {
   const [infoOpen, setInfoOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const [selected, setSelected] = useState(false);
   const { id, displayName } = splitIriToIdAndName(name);
+
+  function selectElement() {
+    setSelected((value) => !value);
+    selectAction();
+  }
 
   return (
     <>
-      <Card shadow={"xs"}>
+      <Card
+        shadow={"xs"}
+        sx={(theme) => {
+          if (!selected) return {};
+          return {
+            outline: "1px solid",
+            outlineColor:
+              theme.colorScheme === "dark"
+                ? theme.colors.dark[1]
+                : theme.colors.dark[9],
+          };
+        }}
+      >
         <Stack>
           <Group position="apart">
             <Text>{category}</Text>
@@ -46,11 +72,19 @@ export function TopologyElement({
 
               <Menu.Dropdown>
                 <Menu.Item
+                  icon={<IconEye size={14} />}
+                  onClick={() => setEditOpen(true)}
+                >
+                  Filter storeys‚
+                </Menu.Item>
+
+                <Menu.Item
                   icon={<IconPencil size={14} />}
                   onClick={() => setEditOpen(true)}
                 >
                   Edit
                 </Menu.Item>
+
                 <Menu.Item
                   icon={<IconTrash size={14} />}
                   color="red"
@@ -64,7 +98,7 @@ export function TopologyElement({
             </Menu>
           </Group>
 
-          <Group position="center">
+          <Group position="center" onClick={selectElement}>
             <Tooltip label={id} withinPortal>
               <Title order={3}>{displayName}</Title>
             </Tooltip>

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Modal } from "~/components/modal/modal";
 import { splitIriToIdAndName } from "~/utils/formatting";
 import { trpc } from "~/utils/trpc";
@@ -22,13 +23,17 @@ export function HasStoreyModal({ open, setOpen, name }: HasStoreyModalProps) {
     setOpen(false);
   }
 
+  useEffect(() => {
+    storeys.refetch();
+  }, [open]);
+
   if (!storeys.data) {
     return <></>;
   }
 
   const storeyList = storeys.data?.map((storey) => {
-    const { id, displayName } = splitIriToIdAndName(storey);
-    return { value: id, label: displayName };
+    const { displayName } = splitIriToIdAndName(storey);
+    return { value: storey, label: displayName };
   });
 
   return (
