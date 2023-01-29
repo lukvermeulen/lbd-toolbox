@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import { AddElement } from "~/components/elements/add-element";
 import { LdElement } from "~/features/ld-element";
+import { MeshModal } from "~/features/representation/mesh/mesh-modal";
 import { PictureLinkMenu } from "~/features/representation/picture/picture-link-menu";
 import { PictureModal } from "~/features/representation/picture/picture-modal";
 import { PointcloudModal } from "~/features/representation/pointcloud/pointcloud-modal";
@@ -26,6 +27,9 @@ export default function RepresentationsPage() {
 
   const meshes = trpc.representation.mesh.list.useQuery();
   const meshMutation = trpc.representation.mesh.add.useMutation({
+    onSuccess: meshes.refetch,
+  });
+  const meshDeleteMutation = trpc.representation.mesh.remove.useMutation({
     onSuccess: meshes.refetch,
   });
 
@@ -92,13 +96,22 @@ export default function RepresentationsPage() {
             and polygons.
             <SimpleGrid cols={4}>
               <AddElement
-                Modal={PictureModal}
+                Modal={MeshModal}
                 submitValues={meshMutation.mutate}
               />
               {!meshes.data && <Text>Loading...</Text>}
-              {meshes.data?.map((mesh) => (
-                // <LdElement />
-                <></>
+              {meshes.data?.map((mesh, index) => (
+                <LdElement
+                  name={mesh.name}
+                  properties={{
+                    date: mesh.date,
+                    fileUrl: mesh.fileUrl,
+                  }}
+                  LinkMenu={PictureLinkMenu}
+                  category="mesh"
+                  key={index}
+                  deleteAction={meshDeleteMutation.mutate}
+                />
               ))}
             </SimpleGrid>
           </Accordion.Panel>

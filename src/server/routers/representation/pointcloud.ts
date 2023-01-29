@@ -29,11 +29,6 @@ export const pointcloudRouter = router({
 
     return pointcloudList;
   }),
-  byId: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(({ input }) => {
-      return input.id;
-    }),
   add: publicProcedure
     .input(z.object({ name: z.string(), fileUrl: z.string() }))
     .mutation(async ({ input }) => {

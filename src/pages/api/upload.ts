@@ -15,11 +15,20 @@ const post = async (req: NextApiRequest, res: NextApiResponse) => {
     let subPath: string;
 
     switch (fields.filetype) {
+      case "picture":
+        subPath = "pictures";
+        break;
+      case "mesh":
+        subPath = "meshes";
+        break;
+      case "brep":
+        subPath = "breps";
+        break;
       case "pointcloud":
         subPath = "pointclouds";
         break;
-      case "picture":
-        subPath = "pictures";
+      case "plan":
+        subPath = "plans";
         break;
       default:
         return res.status(500).json({ error: `Error handling file` });
