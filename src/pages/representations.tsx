@@ -12,6 +12,7 @@ import { AddElement } from "~/components/elements/add-element";
 import { LdElement } from "~/features/ld-element";
 import { PictureLinkMenu } from "~/features/representation/picture/picture-link-menu";
 import { PictureModal } from "~/features/representation/picture/picture-modal";
+import { PointcloudModal } from "~/features/representation/pointcloud/pointcloud-modal";
 import { trpc } from "../utils/trpc";
 
 export default function RepresentationsPage() {
@@ -34,9 +35,13 @@ export default function RepresentationsPage() {
   });
 
   const pointclouds = trpc.representation.pointcloud.list.useQuery();
-  const pointcloudMutatoin = trpc.representation.pointcloud.add.useMutation({
+  const pointcloudMutation = trpc.representation.pointcloud.add.useMutation({
     onSuccess: pointclouds.refetch,
   });
+  const pointcloudDeleteMutation =
+    trpc.representation.pointcloud.remove.useMutation({
+      onSuccess: pointclouds.refetch,
+    });
 
   const plans = trpc.representation.plan.list.useQuery();
   const planMutation = trpc.representation.plan.add.useMutation({
@@ -68,6 +73,7 @@ export default function RepresentationsPage() {
                   name={picture.name}
                   properties={{
                     date: picture.date,
+                    fileUrl: picture.fileUrl,
                     pictureUrl: picture.pictureUrl,
                   }}
                   LinkMenu={PictureLinkMenu}
@@ -118,16 +124,25 @@ export default function RepresentationsPage() {
           <Accordion.Control>point clouds</Accordion.Control>
           <Accordion.Panel>
             A discrete set of data points in space, acquired e.g. by laser
-            scanning or sfm.
+            scanning or sfm. hi
             <SimpleGrid cols={4}>
-              <></>
-              {/* <AddElement
-                action={() => pointcloudMutatoin.mutate({ name: "Pointcloud" })}
-              /> */}
+              <AddElement
+                Modal={PointcloudModal}
+                submitValues={pointcloudMutation.mutate}
+              />
               {!pointclouds.data && <Text>Loading...</Text>}
-              {pointclouds.data?.map((pointcloud) => (
-                <></>
-                // <LdElement />
+              {pointclouds.data?.map((pointcloud, index) => (
+                <LdElement
+                  name={pointcloud.name}
+                  properties={{
+                    date: pointcloud.date,
+                    fileUrl: pointcloud.fileUrl,
+                  }}
+                  LinkMenu={PictureLinkMenu}
+                  category="pointcloud"
+                  key={index}
+                  deleteAction={pointcloudDeleteMutation.mutate}
+                />
               ))}
             </SimpleGrid>
           </Accordion.Panel>

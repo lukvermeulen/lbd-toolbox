@@ -7,9 +7,10 @@ export const pictureRouter = router({
   list: publicProcedure.query(() => {
     const listPictures = `
       PREFIX : <http://example.org/>
-      SELECT ?s ?date ?pictureUrl WHERE {
+      SELECT ?s ?date ?fileUrl ?pictureUrl WHERE {
           << ?s a :representation >>
               :representationType :picture ;
+              :hasFileUrl ?fileUrl ;
               :hasPictureUrl ?pictureUrl ;
               :creationDate ?date;
       }
@@ -20,8 +21,14 @@ export const pictureRouter = router({
     const pictureList = pictures.map((picture: any) => ({
       name: picture.get("s").value,
       date: picture.get("date").value,
+      fileUrl: picture.get("fileUrl").value,
       pictureUrl: picture.get("pictureUrl").value,
-    })) as { name: string; date: string; pictureUrl: string }[];
+    })) as {
+      name: string;
+      date: string;
+      fileUrl: string;
+      pictureUrl: string;
+    }[];
 
     return pictureList;
   }),
@@ -33,7 +40,7 @@ export const pictureRouter = router({
     }),
 
   add: publicProcedure
-    .input(z.object({ name: z.string(), pictureUrl: z.string() }))
+    .input(z.object({ name: z.string(), fileUrl: z.string() }))
     .mutation(async ({ input }) => {
       const pictureName = `${uuidv4()}_${input.name}`;
 
@@ -46,7 +53,8 @@ export const pictureRouter = router({
 
           << ?newRep a :representation >>
             :representationType :picture ;
-            :hasPictureUrl "${input.pictureUrl}"^^xsd:string ;
+            :hasFileUrl "${input.fileUrl}"^^xsd:string ;
+            :hasPictureUrl "${input.fileUrl}"^^xsd:string ;
             :creationDate ?currentDate .
         }
         WHERE {

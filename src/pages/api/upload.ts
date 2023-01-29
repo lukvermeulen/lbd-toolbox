@@ -13,6 +13,8 @@ const post = async (req: NextApiRequest, res: NextApiResponse) => {
   const form = new formidable.IncomingForm();
   form.parse(req, async function (err, fields, files) {
     const fileName = await saveFile(files.file);
+
+    console.log(fields);
     return res
       .status(201)
       .json({ fileUrl: `http://localhost:3000/uploads/${fileName}` });
