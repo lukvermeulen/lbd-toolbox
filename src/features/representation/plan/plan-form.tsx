@@ -2,27 +2,27 @@ import { Button, FileInput, Group, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useState } from "react";
 
-type PointcloudFormProps = {
-  submitFormValues: (values: PointcloudFormValues) => void;
+type PlanFormProps = {
+  submitFormValues: (values: PlanFormValues) => void;
 };
 
-export type PointcloudFormValues = {
+export type PlanFormValues = {
   name: string;
   fileUrl: string;
 };
 
-export function PointcloudForm({ submitFormValues }: PointcloudFormProps) {
+export function PlanForm({ submitFormValues }: PlanFormProps) {
   const [file, setFile] = useState<File | null>();
   const [fileUrl, setFileUrl] = useState<string>();
 
-  const form = useForm<PointcloudFormValues>({
+  const form = useForm<PlanFormValues>({
     initialValues: {
       name: "",
       fileUrl: "",
     },
   });
 
-  function submitForm(values: PointcloudFormValues) {
+  function submitForm(values: PlanFormValues) {
     console.log(values);
     submitFormValues(values);
   }
@@ -35,7 +35,7 @@ export function PointcloudForm({ submitFormValues }: PointcloudFormProps) {
       return;
     }
     formData.append("file", file);
-    formData.append("filetype", "pointcloud");
+    formData.append("filetype", "plan");
 
     const response = await fetch("/api/upload", {
       method: "POST",
@@ -55,7 +55,7 @@ export function PointcloudForm({ submitFormValues }: PointcloudFormProps) {
       <FileInput
         withAsterisk
         required
-        label="Point cloud"
+        label="Plan"
         placeholder="Pick file"
         onChange={(file) => setFile(file)}
       />
@@ -71,7 +71,7 @@ export function PointcloudForm({ submitFormValues }: PointcloudFormProps) {
           withAsterisk
           required
           label="Name"
-          placeholder="Pointcloud name"
+          placeholder="Plan name"
           {...form.getInputProps("name")}
         />
 

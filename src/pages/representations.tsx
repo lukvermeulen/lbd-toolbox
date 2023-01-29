@@ -5,6 +5,7 @@ import { BrepModal } from "~/features/representation/brep/brep-modal";
 import { MeshModal } from "~/features/representation/mesh/mesh-modal";
 import { PictureLinkMenu } from "~/features/representation/picture/picture-link-menu";
 import { PictureModal } from "~/features/representation/picture/picture-modal";
+import { PlanModal } from "~/features/representation/plan/plan-modal";
 import { PointcloudModal } from "~/features/representation/pointcloud/pointcloud-modal";
 import { trpc } from "../utils/trpc";
 
@@ -44,6 +45,9 @@ export default function RepresentationsPage() {
 
   const plans = trpc.representation.plan.list.useQuery();
   const planMutation = trpc.representation.plan.add.useMutation({
+    onSuccess: plans.refetch,
+  });
+  const planDeleteMutation = trpc.representation.plan.remove.useMutation({
     onSuccess: plans.refetch,
   });
 
@@ -170,13 +174,22 @@ export default function RepresentationsPage() {
             Two-Dimensional representations e.g. as line drawing.
             <SimpleGrid cols={4}>
               <AddElement
-                Modal={PictureModal}
+                Modal={PlanModal}
                 submitValues={planMutation.mutate}
               />
               {!plans.data && <Text>Loading...</Text>}
-              {plans.data?.map((plan) => (
-                <></>
-                // <LdElement />
+              {plans.data?.map((plan, index) => (
+                <LdElement
+                  name={plan.name}
+                  properties={{
+                    date: plan.date,
+                    fileUrl: plan.fileUrl,
+                  }}
+                  LinkMenu={PictureLinkMenu}
+                  category="plan"
+                  key={index}
+                  deleteAction={planDeleteMutation.mutate}
+                />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
