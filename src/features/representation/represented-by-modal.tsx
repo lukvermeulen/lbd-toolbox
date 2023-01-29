@@ -54,19 +54,19 @@ export function RepresentedByModal({
       const { displayName } = splitIriToIdAndName(name);
       return { value: name, label: displayName };
     }),
-    mesh: meshes.data?.map((name) => {
+    mesh: meshes.data?.map(({ name }) => {
       const { displayName } = splitIriToIdAndName(name);
       return { value: name, label: displayName };
     }),
-    brep: breps.data?.map((name) => {
+    brep: breps.data?.map(({ name }) => {
       const { displayName } = splitIriToIdAndName(name);
       return { value: name, label: displayName };
     }),
-    pointcloud: pointclouds.data?.map((name) => {
+    pointcloud: pointclouds.data?.map(({ name }) => {
       const { displayName } = splitIriToIdAndName(name);
       return { value: name, label: displayName };
     }),
-    plan: plans.data?.map((name) => {
+    plan: plans.data?.map(({ name }) => {
       const { displayName } = splitIriToIdAndName(name);
       return { value: name, label: displayName };
     }),
