@@ -1,15 +1,7 @@
-import {
-  Accordion,
-  AspectRatio,
-  Card,
-  SimpleGrid,
-  Image,
-  Space,
-  Anchor,
-  Text,
-} from "@mantine/core";
+import { Accordion, SimpleGrid, Space, Text } from "@mantine/core";
 import { AddElement } from "~/components/elements/add-element";
 import { LdElement } from "~/features/ld-element";
+import { BrepModal } from "~/features/representation/brep/brep-modal";
 import { MeshModal } from "~/features/representation/mesh/mesh-modal";
 import { PictureLinkMenu } from "~/features/representation/picture/picture-link-menu";
 import { PictureModal } from "~/features/representation/picture/picture-modal";
@@ -35,6 +27,9 @@ export default function RepresentationsPage() {
 
   const breps = trpc.representation.brep.list.useQuery();
   const brepMutation = trpc.representation.brep.add.useMutation({
+    onSuccess: breps.refetch,
+  });
+  const brepDeleteMutation = trpc.representation.brep.remove.useMutation({
     onSuccess: breps.refetch,
   });
 
@@ -122,13 +117,22 @@ export default function RepresentationsPage() {
             Boundary representations, a 3D object representation.
             <SimpleGrid cols={4}>
               <AddElement
-                Modal={PictureModal}
+                Modal={BrepModal}
                 submitValues={brepMutation.mutate}
               />
               {!breps.data && <Text>Loading...</Text>}
-              {breps.data?.map((brep) => (
-                <></>
-                // <LdElement />
+              {breps.data?.map((brep, index) => (
+                <LdElement
+                  name={brep.name}
+                  properties={{
+                    date: brep.date,
+                    fileUrl: brep.fileUrl,
+                  }}
+                  LinkMenu={PictureLinkMenu}
+                  category="brep"
+                  key={index}
+                  deleteAction={brepDeleteMutation.mutate}
+                />
               ))}
             </SimpleGrid>
           </Accordion.Panel>
