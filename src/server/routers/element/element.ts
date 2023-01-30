@@ -9,28 +9,38 @@ export const elementRouter = router({
       PREFIX : <http://example.org/>
       PREFIX bot: <https://w3id.org/bot#>
 
-      SELECT ?s WHERE {
-        ?s a bot:Element
+      SELECT ?s ?buildingelementClass WHERE {
+        ?s a bot:Element . 
+        
+        OPTIONAL {
+          ?s :buildingelement ?buildingelementClass .
+        }
       }
+      ORDER BY ?buildingelementClass ASC(?s)
     `;
 
     const botElements = oxigraphStore.query(listBotElements);
 
-    const elementList = botElements.map(
-      (element: any) => element.get("s").value
-    ) as string[];
+    const elementList = botElements.map((element: any) => ({
+      name: element.get("s").value,
+      buildingelementClass: element.get("buildingelementClass")?.value,
+    })) as { name: string; buildingelementClass: string }[];
 
     return elementList;
   }),
-  byId: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(({ input }) => {
-      return input.id;
-    }),
   add: publicProcedure
-    .input(z.object({ name: z.string() }))
+    .input(
+      z.object({
+        name: z.string(),
+        buildingelementClass: z.optional(z.string()),
+      })
+    )
     .mutation(async ({ input }) => {
       const elementName = `${uuidv4()}_${input.name}`;
+
+      const addBuildingelementClass = `
+        :${elementName} :buildingelement <${input.buildingelementClass}> .
+      `;
 
       const addBotElement = `
         PREFIX : <http://example.org/>
@@ -38,6 +48,7 @@ export const elementRouter = router({
          
         INSERT DATA {
           :${elementName} a bot:Element .
+          ${input.buildingelementClass ? addBuildingelementClass : ""}
         }
       `;
 
