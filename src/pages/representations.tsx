@@ -1,4 +1,5 @@
-import { Accordion, SimpleGrid, Space, Text } from "@mantine/core";
+import { Accordion, SimpleGrid, Space, Switch, Text } from "@mantine/core";
+import { useState } from "react";
 import { AddElement } from "~/components/elements/add-element";
 import { LdElement } from "~/features/ld-element";
 import { BrepModal } from "~/features/representation/brep/brep-modal";
@@ -10,7 +11,11 @@ import { PointcloudModal } from "~/features/representation/pointcloud/pointcloud
 import { trpc } from "../utils/trpc";
 
 export default function RepresentationsPage() {
-  const pictures = trpc.representation.picture.list.useQuery();
+  const [showOnlyNewest, setShowOnlyNewest] = useState(false);
+
+  const pictures = trpc.representation.picture.list.useQuery({
+    showOnlyNewest,
+  });
   const pictureMutation = trpc.representation.picture.add.useMutation({
     onSuccess: pictures.refetch,
   });
@@ -55,6 +60,11 @@ export default function RepresentationsPage() {
     <>
       <h1>Representations</h1>
       <Text>Manage building representations of various types.</Text>
+      <Switch
+        checked={showOnlyNewest}
+        onChange={(event) => setShowOnlyNewest(event.currentTarget.checked)}
+        label="Show only newest versions"
+      />
       <Space h="md" />
       <Accordion
         defaultValue={["pictures"]}

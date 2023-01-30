@@ -4,34 +4,48 @@ import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
 
 export const pictureRouter = router({
-  list: publicProcedure.query(() => {
-    const listPictures = `
+  list: publicProcedure
+    .input(z.optional(z.object({ showOnlyNewest: z.boolean() })))
+    .query(({ input }) => {
+      const removeOlderVersions = `
+        #MINUS {
+        #    ?parent :hasPreviousRepresentation << ?s a :representation >>
+        #}
+
+        FILTER NOT EXISTS {
+          ?parent :hasPreviousRepresentation << ?s a :representation >>
+        }
+      `;
+
+      const listPictures = `
       PREFIX : <http://example.org/>
       SELECT ?s ?date ?fileUrl ?pictureUrl WHERE {
           << ?s a :representation >>
               :representationType :picture ;
               :hasFileUrl ?fileUrl ;
               :hasPictureUrl ?pictureUrl ;
-              :creationDate ?date;
+              :creationDate ?date .
+
+          ${input?.showOnlyNewest ? removeOlderVersions : ""}
       }
       ORDER BY DESC(?date)
     `;
-    const pictures = oxigraphStore.query(listPictures);
+      const pictures = oxigraphStore.query(listPictures);
 
-    const pictureList = pictures.map((picture: any) => ({
-      name: picture.get("s").value,
-      date: picture.get("date").value,
-      fileUrl: picture.get("fileUrl").value,
-      pictureUrl: picture.get("pictureUrl").value,
-    })) as {
-      name: string;
-      date: string;
-      fileUrl: string;
-      pictureUrl: string;
-    }[];
+      const pictureList = pictures.map((picture: any) => ({
+        name: picture.get("s").value,
+        date: picture.get("date").value,
+        fileUrl: picture.get("fileUrl").value,
+        pictureUrl: picture.get("pictureUrl").value,
+      })) as {
+        name: string;
+        date: string;
+        fileUrl: string;
+        pictureUrl: string;
+      }[];
 
-    return pictureList;
-  }),
+      return pictureList;
+    }),
 
   byId: publicProcedure
     .input(z.object({ id: z.string() }))

@@ -18,13 +18,17 @@ export function NewPictureVersionModal({
   setOpen,
 }: NewPictureVersionModalProps) {
   const pictures = trpc.representation.picture.list.useQuery();
+
+  const utils = trpc.useContext();
+
   const newPictureVersionMutation =
     trpc.representation.picture.newVersion.useMutation({
-      onSuccess: pictures.refetch,
+      onSuccess() {
+        utils.representation.picture.invalidate();
+      },
     });
 
   function submitFormValues(values: NewPictureVersionFormValues) {
-    console.log(values);
     newPictureVersionMutation.mutate({
       name: values.name,
       fileUrl: values.fileUrl,
