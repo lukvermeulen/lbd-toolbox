@@ -42,4 +42,39 @@ export const representationRouter = router({
       oxigraphStore.update(addPicture);
       return;
     }),
+  listPrevious: publicProcedure
+    .input(z.object({ name: z.string() }))
+    .query(({ input }) => {
+      const listPrevious = `
+      PREFIX : <http://example.org/>
+
+      SELECT ?result ?fileUrl ?pictureUrl ?date WHERE {
+          << <${input.name}> a :representation >>
+              :hasPreviousRepresentation* ?prevRep .
+              
+          ?prevRep 
+              :hasFileUrl ?fileUrl ;
+              :hasPictureUrl ?pictureUrl ;
+              :creationDate ?date .
+
+          BIND( SUBJECT(?prevRep) as ?result) .
+      }
+      ORDER BY DESC(?date)
+    `;
+      const previousRepresentations = oxigraphStore.query(listPrevious);
+
+      const previousList = previousRepresentations.map((picture: any) => ({
+        name: picture.get("result").value,
+        date: picture.get("date").value,
+        fileUrl: picture.get("fileUrl").value,
+        pictureUrl: picture.get("pictureUrl").value,
+      })) as {
+        name: string;
+        date: string;
+        fileUrl: string;
+        pictureUrl: string;
+      }[];
+      console.log(previousList);
+      return previousList;
+    }),
 });
