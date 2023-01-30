@@ -13,7 +13,7 @@ export const brepRouter = router({
               :hasFileUrl ?fileUrl ;
               :creationDate ?date;
       }
-      ORDER BY ASC(?s)
+      ORDER BY DESC(?date)
     `;
     const breps = oxigraphStore.query(listBreps);
 

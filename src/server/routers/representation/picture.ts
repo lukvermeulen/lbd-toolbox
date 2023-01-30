@@ -14,7 +14,7 @@ export const pictureRouter = router({
               :hasPictureUrl ?pictureUrl ;
               :creationDate ?date;
       }
-      ORDER BY ASC(?s)
+      ORDER BY DESC(?date)
     `;
     const pictures = oxigraphStore.query(listPictures);
 

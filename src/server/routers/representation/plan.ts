@@ -13,7 +13,7 @@ export const planRouter = router({
               :hasFileUrl ?fileUrl ;
               :creationDate ?date;
       }
-      ORDER BY ASC(?s)
+      ORDER BY DESC(?date)
     `;
     const plans = oxigraphStore.query(listPlans);
 

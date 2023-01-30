@@ -13,7 +13,7 @@ export const pointcloudRouter = router({
               :hasFileUrl ?fileUrl ;
               :creationDate ?date;
       }
-      ORDER BY ASC(?s)
+      ORDER BY DESC(?date)
     `;
     const pointclouds = oxigraphStore.query(listPointclouds);
 

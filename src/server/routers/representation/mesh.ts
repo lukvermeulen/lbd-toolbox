@@ -13,7 +13,7 @@ export const meshRouter = router({
               :hasFileUrl ?fileUrl ;
               :creationDate ?date;
       }
-      ORDER BY ASC(?s)
+      ORDER BY DESC(?date)
     `;
     const meshes = oxigraphStore.query(listMeshes);
 
