@@ -89,4 +89,53 @@ export const pictureRouter = router({
       oxigraphStore.update(deletePicture);
       return;
     }),
+
+  newVersion: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        fileUrl: z.string(),
+        previousName: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const pictureName = `${uuidv4()}_${input.name}`;
+      console.log(input.previousName);
+      const addNewPictureVersion = `
+      PREFIX : <http://example.org/> 
+      PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 
+      DELETE {
+          #<< ?element :representedBy ?oldRep >>
+          #    :active true . 
+      }
+      INSERT {
+        ?newRep a :representation .
+
+        << ?newRep a :representation >>
+          :representationType :picture ;
+          :hasFileUrl ?fileUrl ;
+          :hasPictureUrl ?fileUrl ;
+          :creationDate ?currentDate ;
+          :hasPreviousRepresentation << ?oldRep a :representation >> .
+              
+  
+          #?element :representedBy ?newRep . 
+          #<< ?element :representedBy ?newRep >>
+          #    :active true . 
+      
+          #<< ?element :representedBy ?oldRep >>
+          #    :active false . 
+      }
+      WHERE {
+        BIND( :${pictureName} AS ?newRep) .
+        BIND( URI("${input.previousName}") AS ?oldRep) .
+        BIND( "${input.fileUrl}"^^xsd:string AS ?fileUrl) .
+        BIND( xsd:dateTime(NOW()) AS ?currentDate ) .
+        BIND( :column_01 AS ?element)
+      }
+      `;
+
+      oxigraphStore.update(addNewPictureVersion);
+      return;
+    }),
 });
