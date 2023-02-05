@@ -35,11 +35,7 @@ export const buildingRouter = router({
 
       return buildingList;
     }),
-  byId: publicProcedure
-    .input(z.object({ id: z.string() }))
-    .query(({ input }) => {
-      return input.id;
-    }),
+
   add: publicProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async ({ input }) => {
@@ -57,6 +53,7 @@ export const buildingRouter = router({
       oxigraphStore.update(addBotBuilding);
       return;
     }),
+
   remove: publicProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async ({ input }) => {
