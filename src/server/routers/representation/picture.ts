@@ -2,6 +2,7 @@ import { router, publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
+import { generateAddRepresenation } from "./sparql";
 
 export const pictureRouter = router({
   list: publicProcedure
@@ -52,24 +53,12 @@ export const pictureRouter = router({
     .mutation(async ({ input }) => {
       const pictureName = `${uuidv4()}_${input.name}`;
 
-      const addPicture = `
-        PREFIX : <http://example.org/>
-        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-         
-        INSERT {
-          ?newRep a :representation .
-
-          << ?newRep a :representation >>
-            :representationType :picture ;
-            :hasFileUrl "${input.fileUrl}"^^xsd:string ;
-            :hasPictureUrl "${input.fileUrl}"^^xsd:string ;
-            :creationDate ?currentDate .
-        }
-        WHERE {
-          BIND(:${pictureName} AS ?newRep) .
-          BIND( xsd:dateTime(NOW()) AS ?currentDate ) .
-        }
-      `;
+      const addPicture = generateAddRepresenation(
+        "picture",
+        pictureName,
+        input.fileUrl,
+        input.fileUrl
+      );
 
       oxigraphStore.update(addPicture);
       return;

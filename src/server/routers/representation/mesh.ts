@@ -2,6 +2,7 @@ import { router, publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
+import { generateAddRepresenation } from "./sparql";
 
 export const meshRouter = router({
   list: publicProcedure.query(() => {
@@ -34,23 +35,7 @@ export const meshRouter = router({
     .mutation(async ({ input }) => {
       const meshName = `${uuidv4()}_${input.name}`;
 
-      const addMesh = `
-      PREFIX : <http://example.org/>
-      PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-       
-      INSERT {
-        ?newRep a :representation .
-
-        << ?newRep a :representation >>
-          :representationType :mesh ;
-          :hasFileUrl "${input.fileUrl}"^^xsd:string ;
-          :creationDate ?currentDate .
-      }
-      WHERE {
-        BIND(:${meshName} AS ?newRep) .
-        BIND( xsd:dateTime(NOW()) AS ?currentDate ) .
-      }
-    `;
+      const addMesh = generateAddRepresenation("mesh", meshName, input.fileUrl);
 
       oxigraphStore.update(addMesh);
       return;

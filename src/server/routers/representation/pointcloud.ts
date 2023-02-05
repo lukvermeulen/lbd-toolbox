@@ -2,6 +2,7 @@ import { router, publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
+import { generateAddRepresenation } from "./sparql";
 
 export const pointcloudRouter = router({
   list: publicProcedure.query(() => {
@@ -34,23 +35,11 @@ export const pointcloudRouter = router({
     .mutation(async ({ input }) => {
       const pointcloudName = `${uuidv4()}_${input.name}`;
 
-      const addPointcloud = `
-        PREFIX : <http://example.org/>
-        PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
-         
-        INSERT {
-          ?newRep a :representation .
-
-          << ?newRep a :representation >>
-            :representationType :pointcloud ;
-            :hasFileUrl "${input.fileUrl}"^^xsd:string ;
-            :creationDate ?currentDate .
-        }
-        WHERE {
-          BIND(:${pointcloudName} AS ?newRep) .
-          BIND( xsd:dateTime(NOW()) AS ?currentDate ) .
-        }
-      `;
+      const addPointcloud = generateAddRepresenation(
+        "pointcloud",
+        pointcloudName,
+        input.fileUrl
+      );
 
       oxigraphStore.update(addPointcloud);
       return;

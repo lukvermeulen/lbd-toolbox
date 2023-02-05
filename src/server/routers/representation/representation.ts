@@ -42,6 +42,7 @@ export const representationRouter = router({
       oxigraphStore.update(addPicture);
       return;
     }),
+
   listPrevious: publicProcedure
     .input(z.object({ name: z.string() }))
     .query(({ input }) => {
