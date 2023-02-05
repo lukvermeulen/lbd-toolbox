@@ -17,7 +17,7 @@ type RepresentedByFormProps = {
 export type RepresentedByFormValues = {
   representationType: string;
   representationName: string[];
-  active: boolean;
+  status: string;
 };
 
 export function RepresentedByForm({
@@ -28,7 +28,7 @@ export function RepresentedByForm({
     initialValues: {
       representationType: "picture",
       representationName: [""],
-      active: true,
+      status: "active",
     },
   });
   const [representationData, setRepresentationData] = useState(data.picture);
@@ -59,14 +59,16 @@ export function RepresentedByForm({
           data={representationData || []}
           withAsterisk
           required
-          label="Representation Name"
+          label="Representation name"
           placeholder="Representation name"
           {...form.getInputProps("representationName")}
         />
-        <Checkbox
-          label="Active representations"
-          defaultChecked={true}
-          {...form.getInputProps("active")}
+        <Select
+          data={["active", "inactive"]}
+          withAsterisk
+          required
+          label="Representation status"
+          {...form.getInputProps("status")}
         />
       </Stack>
       <Group position="right" mt="md">

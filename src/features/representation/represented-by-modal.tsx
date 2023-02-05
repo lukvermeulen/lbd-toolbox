@@ -31,7 +31,7 @@ export function RepresentedByModal({
       representedByMutation.mutate({
         element: name,
         representation: space,
-        active: values.active,
+        status: values.status,
       });
     });
     setOpen(false);
