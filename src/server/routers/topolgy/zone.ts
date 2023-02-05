@@ -13,7 +13,10 @@ export const zoneRouter = router({
       PREFIX bot: <https://w3id.org/bot#>
 
       SELECT ?s WHERE {
-        ?s a bot:Zone
+        # these are subclasses of bot:Zone
+        VALUES ?o { bot:Zone bot:Site bot:Building bot:Storey bot:Space } .
+
+        ?s a ?o .
       }
       ORDER BY ASC(?s)
     `;
