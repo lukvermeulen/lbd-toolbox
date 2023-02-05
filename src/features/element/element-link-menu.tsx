@@ -1,7 +1,7 @@
 import { ActionIcon, Menu } from "@mantine/core";
 import { IconArrowMoveRight, IconLine } from "@tabler/icons";
 import { useState } from "react";
-import { NewPictureVersionModal } from "./new-picture-version-modal";
+import { NewPictureVersionModal } from "../representation/picture/new-picture-version-modal";
 
 type PictureLinkMenuProps = { name: string };
 
