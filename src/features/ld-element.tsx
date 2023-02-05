@@ -19,7 +19,7 @@ import {
 import { useState } from "react";
 import { splitIriToIdAndName } from "~/utils/formatting";
 import { EditDrawer } from "./edit-drawer";
-import { InfoDrawer } from "./info-drawer";
+import { InfoDrawer } from "./info-drawer/info-drawer";
 
 type LdElementProps = {
   category: string;
