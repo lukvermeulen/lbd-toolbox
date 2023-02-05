@@ -2,6 +2,7 @@ import { router, publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
+import { generateSimpleLink } from "../representation/sparql";
 
 export const storeyRouter = router({
   list: publicProcedure
@@ -77,14 +78,11 @@ export const storeyRouter = router({
       const elementName = input.name;
       const storeyName = input.storeyName;
 
-      const addHasStorey = `
-        PREFIX : <http://example.org/>
-        PREFIX bot: <https://w3id.org/bot#>
-         
-        INSERT DATA {
-          <${elementName}> bot:hasStorey <${storeyName}> .
-        }
-      `;
+      const addHasStorey = generateSimpleLink(
+        elementName,
+        storeyName,
+        "bot:hasStorey"
+      );
 
       oxigraphStore.update(addHasStorey);
       return;

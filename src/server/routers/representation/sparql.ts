@@ -98,3 +98,26 @@ export function generateListRepresentations(
 
   return query;
 }
+
+export function generateSimpleLink(a: string, b: string, link: string) {
+  const query = `
+    PREFIX : <http://example.org/>
+    PREFIX bot: <https://w3id.org/bot#>
+    PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+    
+    INSERT {
+        ?s ${link} ?o .
+
+        # meta information
+        << ?s ${link} ?o >>
+            :creationDate ?currentDate .
+    }
+    WHERE {
+        BIND( <${a}> AS ?s) .
+        BIND( <${b}> AS ?o) .
+        BIND( xsd:dateTime(NOW()) AS ?currentDate ) .
+      }
+  `;
+
+  return query;
+}

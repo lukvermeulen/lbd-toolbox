@@ -18,28 +18,41 @@ export const representationRouter = router({
       z.object({
         element: z.string(),
         representation: z.string(),
-        active: z.boolean(),
+        status: z.string(),
       })
     )
     .mutation(async ({ input }) => {
-      const addPicture = `
+      const addRepresentation = `
         PREFIX : <http://example.org/>
         PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
          
         INSERT {
+          # link statement
           ?element :representedBy ?representation . 
-          << ?element :representedBy ?representation >>
-            :active ${input.active} ;
+
+          # meta information
+          ?t
             :creationDate ?currentDate .
+          
+          # status information
+          ?t
+            :hasStatus "${input.status}" .
+          
+          # status meta information
+          << ?t :hasStatus "${input.status}" >>
+            :date ?currentDate .
         }
         WHERE {
-          BIND(<${input.element}> AS ?element) .
-          BIND(<${input.representation}> AS ?representation) .
+          BIND( <${input.element}> AS ?element) .
+          BIND( <${input.representation}> AS ?representation) .
+          BIND( << ?element :representedBy ?representation >> AS ?t ) .
           BIND( xsd:dateTime(NOW()) AS ?currentDate ) .
         }
       `;
 
-      oxigraphStore.update(addPicture);
+      console.log(addRepresentation);
+
+      oxigraphStore.update(addRepresentation);
       return;
     }),
 

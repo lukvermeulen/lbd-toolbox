@@ -2,6 +2,7 @@ import { router, publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
+import { generateSimpleLink } from "../representation/sparql";
 
 export const zoneRouter = router({
   list: publicProcedure
@@ -58,6 +59,54 @@ export const zoneRouter = router({
       `;
 
       oxigraphStore.update(deleteBotZone);
+      return;
+    }),
+
+  containsZone: publicProcedure
+    .input(z.object({ name: z.string(), zoneName: z.string() }))
+    .mutation(async ({ input }) => {
+      const elementName = input.name;
+      const zoneName = input.zoneName;
+
+      const addLink = generateSimpleLink(
+        elementName,
+        zoneName,
+        "bot:containsZone"
+      );
+
+      oxigraphStore.update(addLink);
+      return;
+    }),
+
+  adjacentZone: publicProcedure
+    .input(z.object({ name: z.string(), zoneName: z.string() }))
+    .mutation(async ({ input }) => {
+      const elementName = input.name;
+      const zoneName = input.zoneName;
+
+      const addLink = generateSimpleLink(
+        elementName,
+        zoneName,
+        "bot:adjacentZone"
+      );
+
+      oxigraphStore.update(addLink);
+      return;
+    }),
+
+  intersectsZone: publicProcedure
+    .input(z.object({ name: z.string(), zoneName: z.string() }))
+    .mutation(async ({ input }) => {
+      const elementName = input.name;
+      const zoneName = input.zoneName;
+
+      const addLink = generateSimpleLink(
+        elementName,
+        zoneName,
+        "bot:intersectsZone"
+      );
+
+      oxigraphStore.update(addLink);
       return;
     }),
 });
