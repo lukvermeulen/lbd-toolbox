@@ -4,21 +4,13 @@ import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
 import {
   generateAddRepresenation,
+  generateListRepresentations,
   generateRemoveRepresentation,
 } from "./sparql";
 
 export const meshRouter = router({
   list: publicProcedure.query(() => {
-    const listMeshes = `
-      PREFIX : <http://example.org/>
-      SELECT ?s ?date ?fileUrl WHERE {
-          << ?s a :representation >>
-              :representationType :mesh ;
-              :hasFileUrl ?fileUrl ;
-              :creationDate ?date;
-      }
-      ORDER BY DESC(?date)
-    `;
+    const listMeshes = generateListRepresentations("mesh");
     const meshes = oxigraphStore.query(listMeshes);
 
     const meshList = meshes.map((mesh: any) => ({

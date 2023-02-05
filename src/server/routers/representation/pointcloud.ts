@@ -4,21 +4,14 @@ import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
 import {
   generateAddRepresenation,
+  generateListRepresentations,
   generateRemoveRepresentation,
 } from "./sparql";
 
 export const pointcloudRouter = router({
   list: publicProcedure.query(() => {
-    const listPointclouds = `
-      PREFIX : <http://example.org/>
-      SELECT ?s ?date ?fileUrl WHERE {
-          << ?s a :representation >>
-              :representationType :pointcloud ;
-              :hasFileUrl ?fileUrl ;
-              :creationDate ?date;
-      }
-      ORDER BY DESC(?date)
-    `;
+    const listPointclouds = generateListRepresentations("pointcloud");
+
     const pointclouds = oxigraphStore.query(listPointclouds);
 
     const pointcloudList = pointclouds.map((pointcloud: any) => ({

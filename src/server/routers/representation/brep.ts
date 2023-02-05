@@ -4,21 +4,13 @@ import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
 import {
   generateAddRepresenation,
+  generateListRepresentations,
   generateRemoveRepresentation,
 } from "./sparql";
 
 export const brepRouter = router({
   list: publicProcedure.query(() => {
-    const listBreps = `
-      PREFIX : <http://example.org/>
-      SELECT ?s ?date ?fileUrl WHERE {
-          << ?s a :representation >>
-              :representationType :brep ;
-              :hasFileUrl ?fileUrl ;
-              :creationDate ?date;
-      }
-      ORDER BY DESC(?date)
-    `;
+    const listBreps = generateListRepresentations("brep");
     const breps = oxigraphStore.query(listBreps);
 
     const brepList = breps.map((brep: any) => ({

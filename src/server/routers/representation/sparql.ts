@@ -63,3 +63,38 @@ export function generateRemoveRepresentation(
 
   return query;
 }
+
+export function generateListRepresentations(
+  type: RepresentationType,
+  showOnlyNewest?: boolean
+) {
+  const removeOlderVersions = `
+    #MINUS {
+    #    ?parent :hasPreviousRepresentation << ?s a :representation >>
+    #}
+
+    FILTER NOT EXISTS {
+      ?parent :hasPreviousRepresentation << ?s a :representation >>
+    }
+  `;
+
+  const query = `
+        PREFIX : <http://example.org/>
+        SELECT ?s ?date ?fileUrl ?pictureUrl WHERE {
+            << ?s a :representation >>
+                :representationType :${type} ;
+                :hasFileUrl ?fileUrl ;
+                :creationDate ?date .
+
+            OPTIONAL {
+                << ?s a :representation >>
+                    :hasPictureUrl ?pictureUrl ;   
+            }
+
+            ${showOnlyNewest ? removeOlderVersions : ""}
+        }
+        ORDER BY DESC(?date)
+    `;
+
+  return query;
+}

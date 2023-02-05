@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
 import {
   generateAddRepresenation,
+  generateListRepresentations,
   generateRemoveRepresentation,
 } from "./sparql";
 
@@ -11,29 +12,35 @@ export const pictureRouter = router({
   list: publicProcedure
     .input(z.optional(z.object({ showOnlyNewest: z.boolean() })))
     .query(({ input }) => {
-      const removeOlderVersions = `
-        #MINUS {
-        #    ?parent :hasPreviousRepresentation << ?s a :representation >>
-        #}
+      //   const removeOlderVersions = `
+      //     #MINUS {
+      //     #    ?parent :hasPreviousRepresentation << ?s a :representation >>
+      //     #}
 
-        FILTER NOT EXISTS {
-          ?parent :hasPreviousRepresentation << ?s a :representation >>
-        }
-      `;
+      //     FILTER NOT EXISTS {
+      //       ?parent :hasPreviousRepresentation << ?s a :representation >>
+      //     }
+      //   `;
 
-      const listPictures = `
-      PREFIX : <http://example.org/>
-      SELECT ?s ?date ?fileUrl ?pictureUrl WHERE {
-          << ?s a :representation >>
-              :representationType :picture ;
-              :hasFileUrl ?fileUrl ;
-              :hasPictureUrl ?pictureUrl ;
-              :creationDate ?date .
+      //   const listPictures = `
+      //   PREFIX : <http://example.org/>
+      //   SELECT ?s ?date ?fileUrl ?pictureUrl WHERE {
+      //       << ?s a :representation >>
+      //           :representationType :picture ;
+      //           :hasFileUrl ?fileUrl ;
+      //           :hasPictureUrl ?pictureUrl ;
+      //           :creationDate ?date .
 
-          ${input?.showOnlyNewest ? removeOlderVersions : ""}
-      }
-      ORDER BY DESC(?date)
-    `;
+      //       ${input?.showOnlyNewest ? removeOlderVersions : ""}
+      //   }
+      //   ORDER BY DESC(?date)
+      // `;
+
+      const listPictures = generateListRepresentations(
+        "picture",
+        input?.showOnlyNewest
+      );
+
       const pictures = oxigraphStore.query(listPictures);
 
       const pictureList = pictures.map((picture: any) => ({
