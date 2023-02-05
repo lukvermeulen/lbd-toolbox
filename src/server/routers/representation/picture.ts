@@ -2,7 +2,10 @@ import { router, publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
-import { generateAddRepresenation } from "./sparql";
+import {
+  generateAddRepresenation,
+  generateRemoveRepresentation,
+} from "./sparql";
 
 export const pictureRouter = router({
   list: publicProcedure
@@ -69,19 +72,11 @@ export const pictureRouter = router({
     .mutation(async ({ input }) => {
       const pictureName = input.name;
       console.log(pictureName);
-      const deletePicture = `
-          PREFIX : <http://example.org/>
-          PREFIX bot: <https://w3id.org/bot#>
-            
-          DELETE {
-            <${pictureName}> a :representation .
 
-            << <${pictureName}> a :representation >>
-            :representationType :picture ;
-            :creationDate ?creationDate .
-          }
-          WHERE {}
-      `;
+      const deletePicture = generateRemoveRepresentation(
+        "picture",
+        pictureName
+      );
 
       oxigraphStore.update(deletePicture);
       return;

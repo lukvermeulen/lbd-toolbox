@@ -41,3 +41,25 @@ export function generateAddRepresenation(
 
   return query;
 }
+
+export function generateRemoveRepresentation(
+  type: RepresentationType,
+  representationName: string
+) {
+  const query = `
+        PREFIX : <http://example.org/>
+        PREFIX bot: <https://w3id.org/bot#>
+            
+        DELETE {
+            <${representationName}> a :representation .
+
+            << <${representationName}> a :representation >>
+                :representationType :${type} ;
+                :hasFileUrl ?fileUrl ;
+                :creationDate ?creationDate .
+        }
+        WHERE {}
+    `;
+
+  return query;
+}

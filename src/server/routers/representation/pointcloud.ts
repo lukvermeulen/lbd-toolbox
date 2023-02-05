@@ -2,7 +2,10 @@ import { router, publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
-import { generateAddRepresenation } from "./sparql";
+import {
+  generateAddRepresenation,
+  generateRemoveRepresentation,
+} from "./sparql";
 
 export const pointcloudRouter = router({
   list: publicProcedure.query(() => {
@@ -30,6 +33,7 @@ export const pointcloudRouter = router({
 
     return pointcloudList;
   }),
+
   add: publicProcedure
     .input(z.object({ name: z.string(), fileUrl: z.string() }))
     .mutation(async ({ input }) => {
@@ -44,24 +48,16 @@ export const pointcloudRouter = router({
       oxigraphStore.update(addPointcloud);
       return;
     }),
+
   remove: publicProcedure
     .input(z.object({ name: z.string() }))
     .mutation(async ({ input }) => {
       const pointcloudName = input.name;
 
-      const deleteFile = `
-          PREFIX : <http://example.org/>
-          PREFIX bot: <https://w3id.org/bot#>
-            
-          DELETE {
-            <${pointcloudName}> a :representation .
-
-            << <${pointcloudName}> a :representation >>
-            :representationType :pointcloud ;
-            :creationDate ?creationDate .
-          }
-          WHERE {}
-      `;
+      const deleteFile = generateRemoveRepresentation(
+        "pointcloud",
+        pointcloudName
+      );
 
       oxigraphStore.update(deleteFile);
       return;

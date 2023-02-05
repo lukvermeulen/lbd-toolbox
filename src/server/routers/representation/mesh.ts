@@ -2,7 +2,10 @@ import { router, publicProcedure } from "../../trpc";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { oxigraphStore } from "~/server/oxigraph-store";
-import { generateAddRepresenation } from "./sparql";
+import {
+  generateAddRepresenation,
+  generateRemoveRepresentation,
+} from "./sparql";
 
 export const meshRouter = router({
   list: publicProcedure.query(() => {
@@ -45,19 +48,7 @@ export const meshRouter = router({
     .mutation(async ({ input }) => {
       const meshName = input.name;
 
-      const deleteFile = `
-          PREFIX : <http://example.org/>
-          PREFIX bot: <https://w3id.org/bot#>
-            
-          DELETE {
-            <${meshName}> a :representation .
-
-            << <${meshName}> a :representation >>
-            :representationType :mesh ;
-            :creationDate ?creationDate .
-          }
-          WHERE {}
-      `;
+      const deleteFile = generateRemoveRepresentation("mesh", meshName);
 
       oxigraphStore.update(deleteFile);
       return;
