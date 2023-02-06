@@ -28,6 +28,7 @@ export const elementRouter = router({
 
     return elementList;
   }),
+
   add: publicProcedure
     .input(
       z.object({
@@ -53,6 +54,30 @@ export const elementRouter = router({
       `;
 
       oxigraphStore.update(addBotElement);
+      return;
+    }),
+
+  remove: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const elementName = input.name;
+
+      const deleteBotElement = `
+        PREFIX : <http://example.org/>
+        PREFIX bot: <https://w3id.org/bot#>
+            
+        DELETE {
+            <${elementName}> a bot:Element .
+            <${elementName}> :buildingelement ?class .
+        }
+        WHERE {}
+      `;
+
+      oxigraphStore.update(deleteBotElement);
       return;
     }),
 });

@@ -8,6 +8,7 @@ import {
   ActionIcon,
   Group,
 } from "@mantine/core";
+import { useEventListener } from "@mantine/hooks";
 import {
   IconArrowMoveRight,
   IconDotsVertical,
@@ -39,11 +40,15 @@ function RepresentationElement({
   const [editOpen, setEditOpen] = useState(false);
   const [representedByOpen, setRepresentedByOpen] = useState(false);
 
-  const { id, displayName } = splitIriToIdAndName(name);
+  const utils = trpc.useContext();
 
-  function deleteAction(name: string) {
-    return;
-  }
+  const deleteMutation = trpc.element.remove.useMutation({
+    onSuccess: () => {
+      utils.element.invalidate();
+    },
+  });
+
+  const { id, displayName } = splitIriToIdAndName(name);
 
   return (
     <>
@@ -89,7 +94,7 @@ function RepresentationElement({
                   icon={<IconTrash size={14} />}
                   color="red"
                   onClick={() => {
-                    deleteAction(name);
+                    deleteMutation.mutate({ name });
                   }}
                 >
                   Delete
