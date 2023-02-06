@@ -3,6 +3,7 @@
  */
 import { publicProcedure, router } from "../trpc";
 import { elementRouter } from "./element/element";
+import { queryRouter } from "./query/query";
 import { representationRouter } from "./representation/representation";
 import { topologyRouter } from "./topolgy/topology";
 
@@ -12,6 +13,7 @@ export const appRouter = router({
   topology: topologyRouter,
   representation: representationRouter,
   element: elementRouter,
+  query: queryRouter,
 });
 
 export type AppRouter = typeof appRouter;

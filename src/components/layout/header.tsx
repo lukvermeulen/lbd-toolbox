@@ -35,6 +35,14 @@ export function Header() {
       >
         Elements
       </Text>
+      <Text
+        href="query"
+        component={Link}
+        td={router.pathname === "/query" ? "underline" : undefined}
+        ml="auto"
+      >
+        Query
+      </Text>
     </Group>
   );
 }
