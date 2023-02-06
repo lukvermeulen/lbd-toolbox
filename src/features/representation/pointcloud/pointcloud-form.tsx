@@ -23,7 +23,6 @@ export function PointcloudForm({ submitFormValues }: PointcloudFormProps) {
   });
 
   function submitForm(values: PointcloudFormValues) {
-    console.log(values);
     submitFormValues(values);
   }
 
@@ -43,8 +42,6 @@ export function PointcloudForm({ submitFormValues }: PointcloudFormProps) {
     }).then((res) => res.json());
 
     if (response.fileUrl) {
-      console.log(response.fileUrl);
-
       setFileUrl(response.fileUrl);
       form.setFieldValue("fileUrl", response.fileUrl);
     }

@@ -23,7 +23,6 @@ export function PictureForm({ submitFormValues }: PictureFormProps) {
   });
 
   function submitForm(values: PictureFormValues) {
-    console.log(values);
     submitFormValues(values);
   }
 
@@ -43,8 +42,6 @@ export function PictureForm({ submitFormValues }: PictureFormProps) {
     }).then((res) => res.json());
 
     if (response.fileUrl) {
-      console.log(response.fileUrl);
-
       setFileUrl(response.fileUrl);
       form.setFieldValue("fileUrl", response.fileUrl);
     }

@@ -1,6 +1,7 @@
 import { Drawer } from "~/components/drawer/drawer";
 import { Stack, Text, Title } from "@mantine/core";
 import { VersionSection } from "./version-section";
+import { RepresentedBySection } from "./represented-by-section";
 
 type InfoDrawerProps = {
   open: boolean;
@@ -34,6 +35,7 @@ export function InfoDrawer({
           ))}
 
         <VersionSection elementInfo={elementInfo} />
+        <RepresentedBySection elementInfo={elementInfo} />
       </Stack>
     </Drawer>
   );

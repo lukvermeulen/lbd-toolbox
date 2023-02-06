@@ -23,7 +23,6 @@ export function PlanForm({ submitFormValues }: PlanFormProps) {
   });
 
   function submitForm(values: PlanFormValues) {
-    console.log(values);
     submitFormValues(values);
   }
 
@@ -43,8 +42,6 @@ export function PlanForm({ submitFormValues }: PlanFormProps) {
     }).then((res) => res.json());
 
     if (response.fileUrl) {
-      console.log(response.fileUrl);
-
       setFileUrl(response.fileUrl);
       form.setFieldValue("fileUrl", response.fileUrl);
     }

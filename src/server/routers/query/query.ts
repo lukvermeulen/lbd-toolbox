@@ -31,8 +31,6 @@ export const queryRouter = router({
         return singleResult;
       });
 
-      console.log(resultList);
-
       return resultList;
     }),
 

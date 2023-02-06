@@ -25,7 +25,6 @@ export function NewPictureVersionForm({
   });
 
   function submitForm(values: NewPictureVersionFormValues) {
-    console.log(values);
     submitFormValues(values);
   }
 
@@ -45,8 +44,6 @@ export function NewPictureVersionForm({
     }).then((res) => res.json());
 
     if (response.fileUrl) {
-      console.log(response.fileUrl);
-
       setFileUrl(response.fileUrl);
       form.setFieldValue("fileUrl", response.fileUrl);
     }

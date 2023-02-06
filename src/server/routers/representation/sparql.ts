@@ -65,7 +65,7 @@ export function generateRemoveRepresentation(
 }
 
 export function generateListRepresentations(
-  type: RepresentationType,
+  type?: RepresentationType,
   showOnlyNewest?: boolean
 ) {
   const removeOlderVersions = `
@@ -82,7 +82,7 @@ export function generateListRepresentations(
         PREFIX : <http://example.org/>
         SELECT ?s ?date ?fileUrl ?pictureUrl WHERE {
             << ?s a :representation >>
-                :representationType :${type} ;
+                ${type ? `:representationType :${type} ;` : ""}
                 :hasFileUrl ?fileUrl ;
                 :creationDate ?date .
 
@@ -92,6 +92,45 @@ export function generateListRepresentations(
             }
 
             ${showOnlyNewest ? removeOlderVersions : ""}
+        }
+        ORDER BY DESC(?date)
+    `;
+
+  return query;
+}
+
+export function generateListRepresentationsOfElement(
+  name: string,
+  type?: RepresentationType
+) {
+  const removeOlderVersions = `
+    #MINUS {
+    #    ?parent :hasPreviousRepresentation << ?s a :representation >>
+    #}
+
+    FILTER NOT EXISTS {
+      ?parent :hasPreviousRepresentation << ?s a :representation >>
+    }
+  `;
+
+  const query = `
+        PREFIX : <http://example.org/>
+        SELECT ?representation ?date ?fileUrl ?pictureUrl ?status WHERE {
+
+            <${name}> :representedBy ?representation . 
+            
+            # TODO show current active status
+
+            << ?representation a :representation >>
+                ${type ? `:representationType :${type} ;` : ""}
+                :hasFileUrl ?fileUrl ;
+                :creationDate ?date .
+
+            OPTIONAL {
+                << ?representation a :representation >>
+                    :hasPictureUrl ?pictureUrl ;   
+            }
+
         }
         ORDER BY DESC(?date)
     `;

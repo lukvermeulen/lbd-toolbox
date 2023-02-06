@@ -62,8 +62,6 @@ export default function QueryPage() {
 
   const results = trpc.query.query.useQuery({ queryString: query });
 
-  console.log(results.data);
-
   const form = useForm<QueryFormValues>({
     initialValues: {
       query: queryPresets["basicSelect"],

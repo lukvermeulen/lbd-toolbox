@@ -78,7 +78,6 @@ export const pictureRouter = router({
     .input(z.object({ name: z.string() }))
     .mutation(async ({ input }) => {
       const pictureName = input.name;
-      console.log(pictureName);
 
       const deletePicture = generateRemoveRepresentation(
         "picture",
@@ -99,7 +98,6 @@ export const pictureRouter = router({
     )
     .mutation(async ({ input }) => {
       const pictureName = `${uuidv4()}_${input.name}`;
-      console.log(input.previousName);
       const addNewPictureVersion = `
       PREFIX : <http://example.org/> 
       PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> 

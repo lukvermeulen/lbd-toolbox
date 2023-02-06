@@ -72,8 +72,6 @@ export function RepresentedByModal({
     }),
   };
 
-  console.log(representations);
-
   return (
     <Modal open={open} setOpen={setOpen} title="Add representedBy link">
       <RepresentedByForm

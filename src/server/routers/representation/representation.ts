@@ -6,6 +6,7 @@ import { pointcloudRouter } from "./pointcloud";
 import { planRouter } from "./plan";
 import { z } from "zod";
 import { oxigraphStore } from "~/server/oxigraph-store";
+import { generateListRepresentationsOfElement } from "./sparql";
 
 export const representationRouter = router({
   picture: pictureRouter,
@@ -50,8 +51,6 @@ export const representationRouter = router({
         }
       `;
 
-      console.log(addRepresentation);
-
       oxigraphStore.update(addRepresentation);
       return;
     }),
@@ -77,18 +76,47 @@ export const representationRouter = router({
     `;
       const previousRepresentations = oxigraphStore.query(listPrevious);
 
-      const previousList = previousRepresentations.map((picture: any) => ({
-        name: picture.get("result").value,
-        date: picture.get("date").value,
-        fileUrl: picture.get("fileUrl").value,
-        pictureUrl: picture.get("pictureUrl").value,
+      const previousList = previousRepresentations.map((previousRep: any) => ({
+        name: previousRep.get("result").value,
+        date: previousRep.get("date").value,
+        fileUrl: previousRep.get("fileUrl").value,
+        pictureUrl: previousRep.get("pictureUrl").value,
       })) as {
         name: string;
         date: string;
         fileUrl: string;
         pictureUrl: string;
       }[];
-      console.log(previousList);
+
+      return previousList;
+    }),
+  listRepresentations: publicProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        type: z.optional(z.string()),
+      })
+    )
+    .query(({ input }) => {
+      const listAllRepresentations = generateListRepresentationsOfElement(
+        input.name,
+        input.type as any
+      );
+
+      const representations = oxigraphStore.query(listAllRepresentations);
+
+      const previousList = representations.map((representation: any) => ({
+        name: representation.get("representation").value,
+        date: representation.get("date").value,
+        fileUrl: representation.get("fileUrl").value,
+        pictureUrl: representation.get("pictureUrl")?.value,
+      })) as {
+        name: string;
+        date: string;
+        fileUrl: string;
+        pictureUrl: string;
+      }[];
+
       return previousList;
     }),
 });
