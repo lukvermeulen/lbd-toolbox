@@ -54,7 +54,7 @@ export const elementRouter = router({
       `;
 
       oxigraphStore.update(addBotElement);
-      return;
+      return elementName;
     }),
 
   remove: publicProcedure

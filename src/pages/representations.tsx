@@ -25,7 +25,9 @@ export default function RepresentationsPage() {
 
   const meshes = trpc.representation.mesh.list.useQuery();
   const meshMutation = trpc.representation.mesh.add.useMutation({
-    onSuccess: meshes.refetch,
+    onSuccess: () => {
+      meshes.refetch();
+    },
   });
   const meshDeleteMutation = trpc.representation.mesh.remove.useMutation({
     onSuccess: meshes.refetch,

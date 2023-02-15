@@ -33,7 +33,7 @@ export const meshRouter = router({
       const addMesh = generateAddRepresenation("mesh", meshName, input.fileUrl);
 
       oxigraphStore.update(addMesh);
-      return;
+      return meshName;
     }),
   remove: publicProcedure
     .input(z.object({ name: z.string() }))

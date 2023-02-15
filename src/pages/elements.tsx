@@ -126,8 +126,13 @@ function RepresentationElement({
 
 export default function ElementsPage() {
   const elements = trpc.element.list.useQuery();
+
+  const utils = trpc.useContext();
+
   const elementMutation = trpc.element.add.useMutation({
-    onSuccess: elements.refetch,
+    onSuccess: () => {
+      utils.element.invalidate();
+    },
   });
 
   return (

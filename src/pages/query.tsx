@@ -83,8 +83,8 @@ export default function QueryPage() {
       <Space h="md" />
 
       <Select
-        label="Representation type"
-        placeholder="Representation type"
+        label="Query preset"
+        placeholder="Query preset"
         defaultValue="basicSelect"
         data={[{ value: "basicSelect", label: "Basic select" }]}
         onChange={(value) => {
