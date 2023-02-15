@@ -1,4 +1,5 @@
 import { Accordion, Text, SimpleGrid, Anchor, Space } from "@mantine/core";
+import type { SimpleGridBreakpoint } from "@mantine/core";
 import { useEffect, useReducer, useState } from "react";
 
 import { AddElement } from "~/components/elements/add-element";
@@ -125,6 +126,12 @@ export default function TopologyPage() {
     onSuccess: spaces.refetch,
   });
 
+  const breakpoints: SimpleGridBreakpoint[] = [
+    { maxWidth: 980, cols: 3, spacing: "md" },
+    { maxWidth: 755, cols: 2, spacing: "sm" },
+    { maxWidth: 600, cols: 1, spacing: "sm" },
+  ];
+
   useEffect(() => {
     zones.refetch();
     sites.refetch();
@@ -162,7 +169,7 @@ export default function TopologyPage() {
           <Accordion.Panel>
             A part of the physical world or a virtual world that is inherently
             both located in this world and has a 3D spatial extent.
-            <SimpleGrid cols={4}>
+            <SimpleGrid cols={4} breakpoints={breakpoints}>
               <AddElement
                 Modal={ZoneModal}
                 submitValues={zoneMutation.mutate}
@@ -189,7 +196,7 @@ export default function TopologyPage() {
           <Accordion.Control>bot:Site</Accordion.Control>
           <Accordion.Panel>
             An area containing one or more buildings.
-            <SimpleGrid cols={4}>
+            <SimpleGrid cols={4} breakpoints={breakpoints}>
               <AddElement
                 Modal={SiteModal}
                 submitValues={siteMutation.mutate}
@@ -217,7 +224,7 @@ export default function TopologyPage() {
           <Accordion.Panel>
             An independent unit of the built environment with a characteristic
             spatial structure.
-            <SimpleGrid cols={4}>
+            <SimpleGrid cols={4} breakpoints={breakpoints}>
               <AddElement
                 Modal={BuildingModal}
                 submitValues={buildingMutation.mutate}
@@ -243,7 +250,7 @@ export default function TopologyPage() {
           <Accordion.Control>bot:Storey</Accordion.Control>
           <Accordion.Panel>
             A level part of a building.
-            <SimpleGrid cols={4}>
+            <SimpleGrid cols={4} breakpoints={breakpoints}>
               <AddElement
                 Modal={StoreyModal}
                 submitValues={storeyMutation.mutate}
@@ -270,7 +277,7 @@ export default function TopologyPage() {
           <Accordion.Control>bot:Space</Accordion.Control>
           <Accordion.Panel>
             A limited three-dimensional extent defined physically or notionally.
-            <SimpleGrid cols={4}>
+            <SimpleGrid cols={4} breakpoints={breakpoints}>
               <AddElement
                 Modal={SpaceModal}
                 submitValues={spaceMutation.mutate}
