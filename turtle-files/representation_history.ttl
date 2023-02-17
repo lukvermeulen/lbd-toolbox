@@ -1,0 +1,161 @@
+@prefix : <http://example.org/> .
+@prefix bot: <https://w3id.org/bot#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# define elements
+:column_01 
+  a bot:Element ;
+  :buildingelement <https://pi.pauwel.be/voc/buildingelement#Column> .
+
+:column_02 
+  a bot:Element ;
+  :buildingelement <https://pi.pauwel.be/voc/buildingelement#Column> .
+
+:column_03 
+  a bot:Element ;
+  :buildingelement <https://pi.pauwel.be/voc/buildingelement#Column> .
+
+## picture 1
+# define picture representation
+:picture_01 a :representation .
+
+<< :picture_01 a :representation >>
+  :representationType :picture ;
+
+  :device "NikonD5600";
+  
+  :fileUrl "http://localhost:3000/uploads/pictures/picture_01.jpg";
+  :pictureUrl "http://localhost:3000/uploads/pictures/picture_01.jpg";
+  
+  :createdBy "Luk Vermeulen";
+  :creationDate "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date .
+
+# declare element represented by picture
+:column_01 :representedBy :picture_01 .
+
+
+# status information
+<< :column_01 :representedBy :picture_01 >>
+  :date "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date ;
+  :hasStatus "active" ;
+  :hasStatus "inactive" .
+
+<< << :column_01 :representedBy :picture_01 >> :hasStatus "active" >>
+  :date "2021-04-09T15:05:47.277000000015433728Z"^^xsd:date .
+
+<< << :column_01 :representedBy :picture_01 >> :hasStatus "inactive" >>
+  :date "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date .
+
+
+## picture 2
+  # define picture representation
+  :picture_02 a :Representation .
+
+    << :picture_02 a :Representation >>
+      :representationType :picture ;
+
+      :device "NikonD5600";
+      
+      :fileUrl "http://localhost:3000/uploads/pictures/picture_02.jpg";
+      :pictureUrl "http://localhost:3000/uploads/pictures/picture_02.jpg";
+      
+      :createdBy "Luk Vermeulen";
+      :creationDate "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date ;
+
+      :hasPreviousRepresentation << :picture_01 a :Representation >> .
+
+  # declare element represented by picture
+  :column_01 :representedBy :picture_02 .
+
+    # status information
+    << :column_01 :representedBy :picture_02 >>
+      :date "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date ;
+      :hasStatus "active" .
+
+    << << :column_01 :representedBy :picture_02 >> :hasStatus "active" >>
+      :date "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date .
+
+## picture a
+  # define picture representation
+  :picture_a a :Representation .
+
+    << :picture_a a :Representation >>
+      :representationType :picture ;
+
+      :device "NikonD5600";
+      
+      :fileUrl "http://localhost:3000/uploads/pictures/picture_a.jpg";
+      :pictureUrl "http://localhost:3000/uploads/pictures/picture_a.jpg";
+      
+      :createdBy "Luk Vermeulen";
+      :creationDate "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date .
+
+  # declare element represented by picture
+  :column_02 :representedBy :picture_a .
+
+    # status information
+    << :column_02 :representedBy :picture_a >>
+      :date "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date ;
+      :hasStatus "active" ;
+      :hasStatus "inactive" .
+
+    << << :column_02 :representedBy :picture_a >> :hasStatus "active" >>
+      :date "2021-04-09T15:05:47.277000000015433728Z"^^xsd:date .
+    
+    << << :column_02 :representedBy :picture_a >> :hasStatus "inactive" >>
+      :date "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date .
+
+## picture b
+# define picture representation
+:picture_b a :Representation .
+
+<< :picture_b a :Representation >>
+  :representationType :picture ;
+
+  :device "NikonD5600";
+  
+  :fileUrl "http://localhost:3000/uploads/pictures/picture_b.jpg";
+  :pictureUrl "http://localhost:3000/uploads/pictures/picture_b.jpg";
+  
+  :createdBy "Luk Vermeulen";
+  :creationDate "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date ;
+
+  :hasPreviousRepresentation << :picture_a a :Representation >> .
+
+# declare element represented by picture
+:column_02 :representedBy :picture_b .
+
+  # status information
+  << :column_02 :representedBy :picture_b >>
+    :date "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date ;
+    :hasStatus "active" .
+
+  << << :column_02 :representedBy :picture_b >> :hasStatus "active" >>
+    :date "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date .
+
+## scan 1
+# define scan representation
+:scan_01 a :Representation .
+
+<< :scan_01 a :Representation >>
+  :representationType :pointcloud ;
+
+  :device "FaroXYZ";
+  
+  :fileUrl "http://localhost:3000/uploads/pictures/scan_01.laz";
+  :pictureUrl "http://localhost:3000/uploads/pictures/scan_01_thumbnail.jpg";
+  
+  :createdBy "Luk Vermeulen";
+  :creationDate "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date .
+
+# declare element represented by scan
+:column_01 :representedBy :scan_01 .
+
+
+# status information
+<< :column_01 :representedBy :scan_01 >>
+  :date "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date ;
+  :hasStatus "active" .
+
+<< << :column_01 :representedBy :scan_01 >> :hasStatus "active" >>
+  :date "2021-08-09T15:05:47.277000000015433728Z"^^xsd:date .
