@@ -1,20 +1,33 @@
-# Next.js + tRPC
+# LBD toolbox
 
-This example shows how you can make a typed query using a minimal implementation of tRPC following [`this as a reference`](https://trpc.io/docs/nextjs).
+This repository is about software tools for a
+process that allows users to connect heterogeneous
+data to a description of a building topology.
+
+The software is based on a linked data schema in
+rdf-star format for building representations of
+various types.
+
+Part of the software tools are:
+
+- a web-client
+- a blender-plugin
+- jupyter notebooks
 
 ## Setup
 
-```bash
-npx create-next-app --example https://github.com/trpc/trpc --example-path examples/next-minimal-starter trpc-minimal-starter
-cd trpc-minimal-starter
-npm i
-npm run dev
-```
+`npm i`
 
 ## Development
 
+`npm run dev`
+
+## Deployment
+
+### Build project
+
+`npm run build`
+
 ### Start project
 
-```bash
-npm run dev        # starts next.js
-```
+`npm run start`
